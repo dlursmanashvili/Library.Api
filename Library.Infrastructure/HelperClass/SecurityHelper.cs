@@ -1,4 +1,5 @@
 ﻿using Library.Models.Employee;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -9,7 +10,6 @@ namespace Library.Infrastructure.HelperClass;
 
 public static class SecurityHelper
 {
-
     public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
     {
         using (var hmac = new HMACSHA512(passwordSalt))
@@ -28,14 +28,14 @@ public static class SecurityHelper
         }
     }
 
-    public static string CreateToken(Employee user)
+    public static string CreateToken(Employee user, IConfiguration _iconfiguration )
     {
         List<Claim> claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name,user.Email)
         };
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_icnfiguration.GetSection("AppSetting:Token").Value));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_iconfiguration.GetSection("AppSetting:Token").Value));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
         var token = new JwtSecurityToken(
             claims: claims,

@@ -1,7 +1,7 @@
 ﻿using Library.Infrastructure.Interfaces;
 using Library.Models;
 
-namespace Library.Service;
+namespace Library.Service.Services;
 
 public class BookAuthorService
 {

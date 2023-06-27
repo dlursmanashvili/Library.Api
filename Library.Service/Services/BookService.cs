@@ -1,9 +1,10 @@
 ﻿using Library.Infrastructure.Interfaces;
 using Library.Models;
+using Library.Service.IServices;
 
-namespace Library.Service;
+namespace Library.Service.Services;
 
-public class BookService
+public class BookService : IBookService
 {
     private readonly IBookRepository _bookRepository;
     public BookService(IBookRepository bookRepository)

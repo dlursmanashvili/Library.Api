@@ -1,7 +1,7 @@
 ﻿using Library.Infrastructure.Interfaces;
 using Library.Models.Employee;
 
-namespace Library.Service;
+namespace Library.Service.Services;
 
 public class EmployeeService
 {
@@ -25,7 +25,7 @@ public class EmployeeService
 
     public async Task<Employee?> GetEmployeeByEmail(string Email)
     {
-        var users = await this.GetAllEmployee();
+        var users = await GetAllEmployee();
         return users.FirstOrDefault(x => x.Email == Email);
     }
     public async Task<IEnumerable<Employee>> GetAllEmployee()
