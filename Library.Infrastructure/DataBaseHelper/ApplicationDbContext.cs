@@ -1,4 +1,5 @@
 ﻿using Library.Models;
+using Library.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.Db;
@@ -28,10 +29,7 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Employee>().HasData(
               new Employee
               {
-                  BirthDate = new DateTime(1997, 7, 6).Date,
                   Email = "SuperAdmin@gmail.com",
-                  Firstname = "Super",
-                  LastName = "Admin",
                   Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
                   IsDeleted = false,
                   Password = "Password123"

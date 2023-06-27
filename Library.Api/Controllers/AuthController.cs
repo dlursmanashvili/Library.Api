@@ -1,4 +1,5 @@
-﻿using Library.Models;
+﻿using Library.Models.Employee;
+using Library.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -12,33 +13,67 @@ namespace Library.Controller;
 [Route("[controller]")]
 public class AuthController : ControllerBase
 {
-
+    private readonly EmployeeService _employeeService;
     public IConfiguration _icnfiguration { get; }
-    public static Employee user = new Employee();
+
     public AuthController(IConfiguration icnfiguration)
     {
         _icnfiguration = icnfiguration;
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<Employee>> Register(Employee employee)
+    public async Task<ActionResult<EmployeeDto>> Register(EmployeeDto employee)
     {
-        CreatePasswordHash(employee.Password, out byte[] passwordHash, out byte[] passwordSalt);
+        try
+        {
+            CreatePasswordHash(employee.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-        user.Email = employee.Email;
-        user.Password = employee.Password;
-        user.PasswordSalt = passwordSalt;
-        user.PasswordHash = passwordHash;
-        user.LastName = employee.LastName;
-        user.Firstname = employee.Firstname;
-        user.BirthDate = employee.BirthDate;
-        user.IsDeleted = employee.IsDeleted;
-        return Ok(user);
+            var NewUser = new Employee()
+            {
+                Id = new Guid(),
+                Email = employee.Email,
+                Password = employee.Password,
+                PasswordSalt = passwordSalt,
+                PasswordHash = passwordHash,
+                IsDeleted = false,
+            };
+            await _employeeService.CreateEmployee(NewUser);
+            return Ok(employee);
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+
+    }
+    [HttpPost("login")]
+    public async Task<ActionResult<string>> Login(EmployeeDto request)
+    {
+        var users = await _employeeService.GetAllEmployee();
+
+        var employee =  users.FirstOrDefault(x => x.Email == request.Email);
+        if (employee == null)
+        {
+            return BadRequest("user Not found");
+        }
+        if (!VerifyPasswordHash(request.Password,employee.PasswordHash,employee.PasswordSalt))
+        {
+            return BadRequest("Password not correct");
+        }
+        return Ok("successful");
     }
 
+    private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+    {
+        using (var hmac = new HMACSHA512(passwordSalt))
+        {
+            var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return computerHash.Equals(passwordHash);
+        }
+           
+    }
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {
-
         using (var hmac = new HMACSHA512())
         {
             passwordSalt = hmac.Key;
@@ -50,7 +85,7 @@ public class AuthController : ControllerBase
     {
         List<Claim> claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name,user.Firstname)
+            new Claim(ClaimTypes.Name,user.Email)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_icnfiguration.GetSection("AppSetting:Token").Value));

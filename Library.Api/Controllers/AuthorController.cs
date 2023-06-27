@@ -10,10 +10,10 @@ public class AuthorController : ControllerBase
 {
     private readonly AuthorService _authorService;
 
-    public AuthorController(AuthorService authorService)
-    {
-        _authorService = authorService;
-    }
+    //public AuthorController(AuthorService authorService)
+    //{
+    //    _authorService = authorService;
+    //}
 
     [Route("AddAuthor")]
     [HttpPost]

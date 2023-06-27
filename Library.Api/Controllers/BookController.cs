@@ -10,10 +10,10 @@ public class BookController : ControllerBase
 {
     private readonly BookService _bookService;
 
-    public BookController(BookService bookService)
-    {
-        _bookService = bookService;
-    }
+    //public BookController(BookService bookService)
+    //{
+    //    _bookService = bookService;
+    //}
 
     [Route("CreateBook")]
     [HttpPost]
