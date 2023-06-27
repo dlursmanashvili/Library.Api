@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.Controller;
 
 [ApiController]
-[Route("api/Authors")]
+[Route("[controller]")]
 public class AuthorController : ControllerBase
 {
     private readonly AuthorService _authorService;
@@ -15,6 +15,7 @@ public class AuthorController : ControllerBase
         _authorService = authorService;
     }
 
+    [Route("AddAuthor")]
     [HttpPost]
     public async Task<IActionResult> CreateAuthor(Author author)
     {
@@ -22,6 +23,7 @@ public class AuthorController : ControllerBase
         return Ok();
     }
 
+    [Route("GetAuthorById")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetAuthorById(Guid id)
     {
@@ -32,6 +34,7 @@ public class AuthorController : ControllerBase
         return Ok(author);
     }
 
+    [Route("GetAllAuthors")]
     [HttpGet]
     public async Task<IActionResult> GetAllAuthors()
     {
@@ -39,6 +42,7 @@ public class AuthorController : ControllerBase
         return Ok(authors);
     }
 
+    [Route("UpdateAuthor")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateAuthor(Guid id, Author author)
     {
@@ -49,6 +53,7 @@ public class AuthorController : ControllerBase
         return Ok();
     }
 
+    [Route("DeleteAuthor")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAuthor(Guid id)
     {

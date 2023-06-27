@@ -8,6 +8,6 @@ public class Book : BaseEntity<Guid>
     public int? Rating { get; set; }
     public DateTime? PublicationDate { get; set; }
     public bool InLybrary { get; set; }
-    public List<BookAuthor> BookAuthors { get; set; } // Добавлено свойство BookAuthors
+    public List<BookAuthor> BookAuthors { get; set; }
 
 }

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Library.Controller;
 
 [ApiController]
-[Route("api/books")]
+[Route("[controller]")]
 public class BookController : ControllerBase
 {
     private readonly BookService _bookService;
@@ -15,6 +15,7 @@ public class BookController : ControllerBase
         _bookService = bookService;
     }
 
+    [Route("CreateBook")]
     [HttpPost]
     public async Task<IActionResult> CreateBook(Book book)
     {
@@ -22,6 +23,7 @@ public class BookController : ControllerBase
         return Ok();
     }
 
+    [Route("GetBookById")]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetBookById(Guid id)
     {
@@ -32,6 +34,7 @@ public class BookController : ControllerBase
         return Ok(book);
     }
 
+    [Route("GetAllBooks")]
     [HttpGet]
     public async Task<IActionResult> GetAllBooks()
     {
@@ -45,7 +48,7 @@ public class BookController : ControllerBase
         await _bookService.UpdateBook(book);
         return Ok();
     }
-
+    [Route("DeleteBook")]
     [HttpDelete]
     public async Task<IActionResult> DeleteBook(Book book)
     {

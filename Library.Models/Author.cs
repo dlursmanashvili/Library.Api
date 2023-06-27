@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Library.Models;
 
@@ -16,6 +10,6 @@ public class Author : BaseEntity<Guid>
     public string LastName { get; set; }
     [Required]
     public DateTime DateOfBirth { get; set; }
-    public List<BookAuthor> BookAuthors { get; set; } // Добавлено свойство BookAuthors
+    public List<BookAuthor> BookAuthors { get; set; } 
 
 }
