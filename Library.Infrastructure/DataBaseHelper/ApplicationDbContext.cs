@@ -1,4 +1,5 @@
-﻿using Library.Models;
+﻿using Library.Infrastructure.HelperClass;
+using Library.Models;
 using Library.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,10 +10,7 @@ public class ApplicationDbContext : DbContext
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    public DbSet<Book> Books { get; set; }
-    public DbSet<Author> Authors { get; set; }
-    public DbSet<BookAuthor> BookAuthors { get; set; }
-    public DbSet<Employee> Employees { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BookAuthor>()
@@ -28,16 +26,23 @@ public class ApplicationDbContext : DbContext
             .WithMany(a => a.BookAuthors)
             .HasForeignKey(ba => ba.AuthorId);
 
+        SecurityHelper.CreatePasswordHash("123", out byte[] passwordHash, out byte[] passwordSalt);
 
         modelBuilder.Entity<Employee>().HasData(
               new Employee
               {
                   Email = "SuperAdmin@gmail.com",
                   Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
+                  PasswordHash= passwordHash,
+                  PasswordSalt = passwordSalt,
                   IsDeleted = false,
-                  //Password = "Password123"
               });
 
         base.OnModelCreating(modelBuilder);
     }
+
+    public DbSet<Book> Books { get; set; }
+    public DbSet<Author> Authors { get; set; }
+    public DbSet<BookAuthor> BookAuthors { get; set; }
+    public DbSet<Employee> Employees { get; set; }
 }

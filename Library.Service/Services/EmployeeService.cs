@@ -1,9 +1,11 @@
 ﻿using Library.Infrastructure.Interfaces;
 using Library.Models.Employee;
+using Library.Models.Exceptions;
+using Library.Service.IServices;
 
 namespace Library.Service.Services;
 
-public class EmployeeService
+public class EmployeeService : IEmployeeService
 {
 
     private readonly IEmployeeRepository _employeeRepository;
@@ -25,8 +27,10 @@ public class EmployeeService
 
     public async Task<Employee?> GetEmployeeByEmail(string Email)
     {
-        var users = await GetAllEmployee();
-        return users.FirstOrDefault(x => x.Email == Email);
+        var Result = await _employeeRepository.GetEmployeeByEmail(Email);
+        if (Result == null) throw new NotFoundException("user Not found");
+
+       return Result;
     }
     public async Task<IEnumerable<Employee>> GetAllEmployee()
     {

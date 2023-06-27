@@ -35,10 +35,7 @@ namespace Library.Controller
                     PasswordHash = passwordHash,
                     IsDeleted = false,
                 };
-                if (true)
-                {
-
-                }
+              
                 await _employeeService.CreateEmployee(NewUser);
                 return Ok(employee);
             }

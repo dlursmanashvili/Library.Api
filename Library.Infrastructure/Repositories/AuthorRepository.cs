@@ -4,9 +4,9 @@ using Library.Infrastructure.Repositories;
 
 namespace Library.Models;
 
-public class AuthorREpository : RepositoryBase<Author>, IAuthorRepository
+public class AuthorRepository : RepositoryBase<Author>, IAuthorRepository
 {
-    public AuthorREpository(ApplicationDbContext context) : base(context)
+    public AuthorRepository(ApplicationDbContext context) : base(context)
     {
     }
 }
