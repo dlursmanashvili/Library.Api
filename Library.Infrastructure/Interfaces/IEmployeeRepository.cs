@@ -4,4 +4,5 @@ namespace Library.Infrastructure.Interfaces;
 
 public interface IEmployeeRepository : IRepositoryBase<Employee>
 {
+
 }

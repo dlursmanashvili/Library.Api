@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+
 namespace Library.Controller;
 
 [ApiController]
@@ -27,12 +28,10 @@ public class AuthController : ControllerBase
         try
         {
             CreatePasswordHash(employee.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
             var NewUser = new Employee()
             {
                 Id = new Guid(),
                 Email = employee.Email,
-                Password = employee.Password,
                 PasswordSalt = passwordSalt,
                 PasswordHash = passwordHash,
                 IsDeleted = false,
@@ -49,14 +48,12 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<ActionResult<string>> Login(EmployeeDto request)
     {
-        var users = await _employeeService.GetAllEmployee();
-
-        var employee =  users.FirstOrDefault(x => x.Email == request.Email);
+        var employee = await _employeeService.GetEmployeeByEmail(request.Email);
         if (employee == null)
         {
             return BadRequest("user Not found");
         }
-        if (!VerifyPasswordHash(request.Password,employee.PasswordHash,employee.PasswordSalt))
+        if (!VerifyPasswordHash(request.Password, employee.PasswordHash, employee.PasswordSalt))
         {
             return BadRequest("Password not correct");
         }
@@ -70,7 +67,7 @@ public class AuthController : ControllerBase
             var computerHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             return computerHash.Equals(passwordHash);
         }
-           
+
     }
     private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
     {

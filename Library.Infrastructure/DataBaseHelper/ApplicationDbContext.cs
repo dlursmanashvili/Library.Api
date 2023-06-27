@@ -32,7 +32,7 @@ public class ApplicationDbContext : DbContext
                   Email = "SuperAdmin@gmail.com",
                   Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
                   IsDeleted = false,
-                  Password = "Password123"
+                  //Password = "Password123"
               });
 
         base.OnModelCreating(modelBuilder);
