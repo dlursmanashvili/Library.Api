@@ -1,8 +1,8 @@
-﻿using Library.Models;
+﻿using Library.Models.Models.Authors;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Controllers
+namespace Library.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -17,7 +17,7 @@ namespace Library.Controllers
 
         [HttpPost]
         [Route("AddAuthor")]
-        public async Task<IActionResult> CreateAuthor(Author author)
+        public async Task<IActionResult> CreateAuthor(string Email, Author author)
         {
             await _authorService.CreateAuthor(author);
             return Ok();
@@ -44,7 +44,7 @@ namespace Library.Controllers
 
         [HttpPut]
         [Route("UpdateAuthor/{id}")]
-        public async Task<IActionResult> UpdateAuthor(Guid id, Author author)
+        public async Task<IActionResult> UpdateAuthor(string Email, Guid id, Author author)
         {
             if (id != author.Id)
                 return BadRequest();
@@ -55,7 +55,7 @@ namespace Library.Controllers
 
         [HttpDelete]
         [Route("DeleteAuthor/{id}")]
-        public async Task<IActionResult> DeleteAuthor(Guid id)
+        public async Task<IActionResult> DeleteAuthor(string Email, Guid id)
         {
             var author = await _authorService.GetAuthorById(id);
             if (author == null)

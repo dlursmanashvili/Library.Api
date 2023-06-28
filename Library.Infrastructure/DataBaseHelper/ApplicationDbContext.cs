@@ -1,6 +1,8 @@
 ﻿using Library.Infrastructure.HelperClass;
-using Library.Models;
-using Library.Models.Employee;
+using Library.Models.Models.Authors;
+using Library.Models.Models.BookAuthors;
+using Library.Models.Models.Books;
+using Library.Models.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.DataBaseHelper;
@@ -35,6 +37,7 @@ public class ApplicationDbContext : DbContext
                   Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
                   PasswordHash = passwordHash,
                   PasswordSalt = passwordSalt,
+                  IsAdministrator = true,
                   IsDeleted = false,
               });
 

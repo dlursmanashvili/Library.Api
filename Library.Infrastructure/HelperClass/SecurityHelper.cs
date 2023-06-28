@@ -1,4 +1,4 @@
-﻿using Library.Models.Employee;
+﻿using Library.Models.Models.Employee;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;

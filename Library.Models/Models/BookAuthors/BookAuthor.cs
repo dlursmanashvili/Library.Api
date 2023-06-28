@@ -1,4 +1,7 @@
-﻿namespace Library.Models;
+﻿using Library.Models.Models.Authors;
+using Library.Models.Models.Books;
+
+namespace Library.Models.Models.BookAuthors;
 
 public class BookAuthor : BaseEntity<Guid>
 {

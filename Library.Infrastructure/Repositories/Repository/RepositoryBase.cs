@@ -1,8 +1,8 @@
 ﻿using Library.Infrastructure.DataBaseHelper;
-using Library.Infrastructure.Interfaces;
+using Library.Infrastructure.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Infrastructure.Repositorie;
+namespace Library.Infrastructure.Repositories.Repository;
 
 public class RepositoryBase<TModel> : IRepositoryBase<TModel> where TModel : class
 {

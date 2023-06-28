@@ -1,6 +1,6 @@
-﻿using Library.Infrastructure.Interfaces;
-using Library.Models.Employee;
+﻿using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models.Exceptions;
+using Library.Models.Models.Employee;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;

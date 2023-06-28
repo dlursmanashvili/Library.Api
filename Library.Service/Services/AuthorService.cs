@@ -1,5 +1,5 @@
-﻿using Library.Infrastructure.Interfaces;
-using Library.Models;
+﻿using Library.Infrastructure.Repositories.Interfaces;
+using Library.Models.Models.Authors;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;

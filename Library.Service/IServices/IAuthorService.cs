@@ -1,4 +1,4 @@
-﻿using Library.Models;
+﻿using Library.Models.Models.Authors;
 
 namespace Library.Service.IServices;
 

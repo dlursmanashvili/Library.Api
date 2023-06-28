@@ -1,6 +1,6 @@
-﻿using Library.Models.Employee;
+﻿using Library.Models.Models.Employee;
 
-namespace Library.Infrastructure.Interfaces;
+namespace Library.Infrastructure.Repositories.Interfaces;
 
 public interface IEmployeeRepository : IRepositoryBase<Employee>
 {

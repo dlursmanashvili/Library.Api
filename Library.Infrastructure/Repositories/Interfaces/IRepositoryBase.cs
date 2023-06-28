@@ -1,4 +1,4 @@
-﻿namespace Library.Infrastructure.Interfaces;
+﻿namespace Library.Infrastructure.Repositories.Interfaces;
 
 public interface IRepositoryBase<TModel> where TModel : class
 {

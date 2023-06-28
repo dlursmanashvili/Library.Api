@@ -1,4 +1,4 @@
-﻿namespace Library.Models.AuthModels;
+﻿namespace Library.Models.Models.AuthModels;
 public class AuthRequest
 {
     public string Email { get; set; } = null!;

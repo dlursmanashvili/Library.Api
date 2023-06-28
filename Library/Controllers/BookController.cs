@@ -1,9 +1,9 @@
-﻿using Library.Models;
+﻿using Library.Models.Models.Books;
 using Library.Service.IServices;
 using Library.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Controllers
+namespace Library.Api.Controllers
 {
 
     [ApiController]

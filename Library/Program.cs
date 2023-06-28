@@ -1,6 +1,6 @@
-using Library;
+using Library.Api;
+using Library.Api.Middlewares;
 using Library.Infrastructure.DataBaseHelper;
-using Library.Middlewares;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,67 +1,29 @@
-﻿using Library.Infrastructure.HelperClass;
-using Library.Infrastructure.Interfaces;
-using Library.Models.Employee;
+﻿using Library.Models.Models.AuthModels;
 using Library.Service.IServices;
-using Library.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Library.Controllers
+namespace Library.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly IEmployeeService _employeeService;
-        public IConfiguration _icnfiguration { get; }
-        public AuthController(IConfiguration icnfiguration, IEmployeeService employeeService)
+        private readonly IAuthentification _authentification;
+        public AuthController(IAuthentification authentification)
         {
-            _icnfiguration = icnfiguration;
-            _employeeService = employeeService;
+            _authentification = authentification;
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<ActionResult<EmployeeDto>> Register(EmployeeDto employee)
-        {
-            try
-            {
-                SecurityHelper.CreatePasswordHash(employee.Password, out byte[] passwordHash, out byte[] passwordSalt);
-                var NewUser = new Employee()
-                {
-                    Id = Guid.NewGuid(),
-                    Email = employee.Email,
-                    PasswordSalt = passwordSalt,
-                    PasswordHash = passwordHash,
-                    IsDeleted = false,
-                };
-
-                await _employeeService.CreateEmployee(NewUser);
-                return Ok(employee);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        public async Task<IActionResult> Register(RegistrationRequest request) =>
+             Ok(await _authentification.Register(request));
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<string>> Login(EmployeeDto request)
-        {
-            var employee = await _employeeService.GetEmployeeByEmail(request.Email);
-            if (employee == null)
-            {
-                return BadRequest("user Not found");
-            }
-            if (!SecurityHelper.VerifyPasswordHash(request.Password, employee.PasswordHash, employee.PasswordSalt))
-            {
-                return BadRequest("Password not correct");
-            }
-            return Ok(SecurityHelper.CreateToken(employee, _icnfiguration));
-        }
-
+        public async Task<IActionResult> Login(AuthRequest request) =>
+            Ok(await _authentification.Login(request));
     }
-
 }
 

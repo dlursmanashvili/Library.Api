@@ -1,4 +1,4 @@
-﻿using Library.Models.Employee;
+﻿using Library.Models.Models.Employee;
 
 namespace Library.Service.IServices;
 
