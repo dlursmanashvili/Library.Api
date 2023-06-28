@@ -29,7 +29,7 @@ public class Authentification : IAuthentification
         return new AuthResult()
         {
             IsSuccess = true,
-            AccessToken = SecurityHelper.CreateToken(employee, _icnfiguration),
+            AccessToken = Infrastructure.HelperClass.SecurityHelper.CreateToken(employee, _icnfiguration),
             SuccessMassage = "logged-in successfully"
         };
     }

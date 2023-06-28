@@ -16,10 +16,10 @@ namespace Library.Api.Controllers
         }
 
         [HttpPost]
-        [Route("AddAuthor")]
-        public async Task<IActionResult> CreateAuthor(string Email, Author author)
+        [Route("AddAuthor/{Email}/{id}")]
+        public async Task<IActionResult> CreateAuthor(string Email, Guid id)
         {
-            await _authorService.CreateAuthor(author);
+            await _authorService.CreateAuthor(Email, id);
             return Ok();
         }
 
@@ -43,27 +43,18 @@ namespace Library.Api.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateAuthor/{id}")]
-        public async Task<IActionResult> UpdateAuthor(string Email, Guid id, Author author)
+        [Route("UpdateAuthor/{Email}/{id}")]
+        public async Task<IActionResult> UpdateAuthor(string Email, Guid id)
         {
-            if (id != author.Id)
-                return BadRequest();
-
-            await _authorService.UpdateAuthor(author);
+            await _authorService.UpdateAuthor(Email, id);
             return Ok();
         }
 
         [HttpDelete]
-        [Route("DeleteAuthor/{id}")]
+        [Route("DeleteAuthor/{Email}/{id}")]
         public async Task<IActionResult> DeleteAuthor(string Email, Guid id)
-        {
-            var author = await _authorService.GetAuthorById(id);
-            if (author == null)
-                return NotFound();
-
-            await _authorService.DeleteAuthor(author);
-            return Ok();
-        }
+            => Ok(await _authorService.DeleteAuthor(Email, id));
+        
     }
 
 }

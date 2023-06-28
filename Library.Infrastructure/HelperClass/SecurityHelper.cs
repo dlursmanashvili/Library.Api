@@ -10,6 +10,7 @@ namespace Library.Infrastructure.HelperClass;
 
 public static class SecurityHelper
 {
+
     public static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
     {
         using (var hmac = new HMACSHA512(passwordSalt))
@@ -44,4 +45,7 @@ public static class SecurityHelper
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
+
+  
 }

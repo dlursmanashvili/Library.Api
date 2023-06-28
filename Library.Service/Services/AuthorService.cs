@@ -1,4 +1,6 @@
-﻿using Library.Infrastructure.Repositories.Interfaces;
+﻿using Library.Infrastructure.HelperClass;
+using Library.Infrastructure.Repositories.Interfaces;
+using Library.Models;
 using Library.Models.Models.Authors;
 using Library.Service.IServices;
 
@@ -8,13 +10,18 @@ public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
 
+    private readonly CoommandResult result = new CoommandResult();
+
+    private readonly IEmployeeService _employeeService;
     public AuthorService(IAuthorRepository authorRepository)
     {
         _authorRepository = authorRepository;
     }
 
-    public async Task CreateAuthor(Author author)
+    public async Task CreateAuthor(string Email, Guid id)
     {
+        var author = await _authorRepository.GetByIdAsync(id);
+
         await _authorRepository.AddAsync(author);
     }
 
@@ -28,13 +35,30 @@ public class AuthorService : IAuthorService
         return await _authorRepository.LoadAsync();
     }
 
-    public async Task UpdateAuthor(Author author)
+    public async Task UpdateAuthor(string Email, Guid id)
     {
+        var user = await _employeeService.GetEmployeeByEmail(Email);
+        ValidationHelper.UserValidation(user, Email, true);
+
+        var author = await _authorRepository.GetByIdAsync(id);
+        ValidationHelper.AuthorValidation(author);
+
         await _authorRepository.UpdateAsync(author);
     }
 
-    public async Task DeleteAuthor(Author author)
+    public async Task<CoommandResult> DeleteAuthor(string Email, Guid id)
     {
-        await _authorRepository.RemoveAsync(author);
+        var user = await _employeeService.GetEmployeeByEmail(Email);
+        ValidationHelper.UserValidation(user, Email, true);
+
+        var author = await _authorRepository.GetByIdAsync(id);
+        ValidationHelper.AuthorValidation(author);
+        if (author != null)
+        {
+            await _authorRepository.RemoveAsync(author);
+            result.IsSuccess = true;
+            return result;
+        }
+       
     }
 }
