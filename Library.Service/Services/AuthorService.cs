@@ -10,8 +10,6 @@ public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
 
-    private readonly CoommandResult result = new CoommandResult();
-
     private readonly IEmployeeService _employeeService;
     public AuthorService(IAuthorRepository authorRepository)
     {
@@ -20,14 +18,20 @@ public class AuthorService : IAuthorService
 
     public async Task CreateAuthor(string Email, Guid id)
     {
+        var user = await _employeeService.GetEmployeeByEmail(Email);
+        ValidationHelper.UserValidation(user, Email, true);
+
         var author = await _authorRepository.GetByIdAsync(id);
+        ValidationHelper.AuthorValidation(author);
 
         await _authorRepository.AddAsync(author);
     }
 
     public async Task<Author> GetAuthorById(Guid id)
     {
-        return await _authorRepository.GetByIdAsync(id);
+        var author = await _authorRepository.GetByIdAsync(id);
+        ValidationHelper.AuthorValidation(author);
+        return author;
     }
 
     public async Task<IEnumerable<Author>> GetAllAuthors()
@@ -53,12 +57,8 @@ public class AuthorService : IAuthorService
 
         var author = await _authorRepository.GetByIdAsync(id);
         ValidationHelper.AuthorValidation(author);
-        if (author != null)
-        {
-            await _authorRepository.RemoveAsync(author);
-            result.IsSuccess = true;
-            return result;
-        }
-       
+
+        await _authorRepository.RemoveAsync(author);
+        return new CoommandResult { IsSuccess = true };
     }
 }
