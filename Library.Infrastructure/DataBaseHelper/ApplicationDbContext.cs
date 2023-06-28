@@ -3,14 +3,14 @@ using Library.Models;
 using Library.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
-namespace Library.Infrastructure.Db;
+namespace Library.Infrastructure.DataBaseHelper;
 
 public class ApplicationDbContext : DbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
     }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<BookAuthor>()
@@ -33,7 +33,7 @@ public class ApplicationDbContext : DbContext
               {
                   Email = "SuperAdmin@gmail.com",
                   Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
-                  PasswordHash= passwordHash,
+                  PasswordHash = passwordHash,
                   PasswordSalt = passwordSalt,
                   IsDeleted = false,
               });

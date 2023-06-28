@@ -6,7 +6,7 @@ using Library.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
-namespace Library.Controller
+namespace Library.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -29,13 +29,13 @@ namespace Library.Controller
                 SecurityHelper.CreatePasswordHash(employee.Password, out byte[] passwordHash, out byte[] passwordSalt);
                 var NewUser = new Employee()
                 {
-                    Id =  Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     Email = employee.Email,
                     PasswordSalt = passwordSalt,
                     PasswordHash = passwordHash,
                     IsDeleted = false,
                 };
-              
+
                 await _employeeService.CreateEmployee(NewUser);
                 return Ok(employee);
             }

@@ -1,8 +1,8 @@
-﻿using Library.Infrastructure.Db;
+﻿using Library.Infrastructure.DataBaseHelper;
 using Library.Infrastructure.Interfaces;
-using Library.Infrastructure.Repositories;
+using Library.Models;
 
-namespace Library.Models;
+namespace Library.Infrastructure.Repositorie;
 
 public class AuthorRepository : RepositoryBase<Author>, IAuthorRepository
 {

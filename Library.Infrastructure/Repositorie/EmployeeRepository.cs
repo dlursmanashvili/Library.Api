@@ -1,8 +1,8 @@
-﻿using Library.Infrastructure.Db;
+﻿using Library.Infrastructure.DataBaseHelper;
 using Library.Infrastructure.Interfaces;
 using Library.Models.Employee;
 
-namespace Library.Infrastructure.Repositories;
+namespace Library.Infrastructure.Repositorie;
 
 public class EmployeeRepository : RepositoryBase<Employee>, IEmployeeRepository
 {

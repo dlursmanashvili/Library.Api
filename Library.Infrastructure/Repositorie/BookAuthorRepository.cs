@@ -1,4 +1,4 @@
-﻿using Library.Infrastructure.Db;
+﻿using Library.Infrastructure.DataBaseHelper;
 using Library.Infrastructure.Interfaces;
 using Library.Models;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Infrastructure.Repositories;
+namespace Library.Infrastructure.Repositorie;
 
 public class BookAuthorRepository : RepositoryBase<BookAuthor>, IBookAuthorRepository
 {

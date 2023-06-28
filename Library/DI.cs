@@ -1,6 +1,5 @@
 ﻿using Library.Infrastructure.Interfaces;
-using Library.Infrastructure.Repositories;
-using Library.Models;
+using Library.Infrastructure.Repositorie;
 using Library.Service.IServices;
 using Library.Service.Services;
 

@@ -2,7 +2,7 @@
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Controller
+namespace Library.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
