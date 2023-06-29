@@ -1,7 +1,7 @@
 ﻿using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models;
-using Library.Models.Models.Authors;
+using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;
@@ -16,49 +16,73 @@ public class AuthorService : IAuthorService
         _authorRepository = authorRepository;
     }
 
-    public async Task CreateAuthor(string Email, Guid id)
+    public async Task<CoommandResult> CreateAuthor(CreateAuthorRequest createAuthorRequest)
     {
-        var user = await _employeeService.GetEmployeeByEmail(Email);
-        ValidationHelper.UserValidation(user, Email, true);
+        var user = await _employeeService.GetEmployeeByEmail(createAuthorRequest.AdminEmail);
+        ValidationHelper.UserValidation(user, createAuthorRequest.AdminEmail, true);
 
-        var author = await _authorRepository.GetByIdAsync(id);
+        var author = await _authorRepository.GetByIdAsync(createAuthorRequest.id);
         ValidationHelper.AuthorValidation(author);
 
         await _authorRepository.AddAsync(author);
+        return new CoommandResult();
     }
-
-    public async Task<Author> GetAuthorById(Guid id)
+    public async Task<CoommandResult> UpdateAuthor(EditAuthorRequest editAuthorRequest)
     {
-        var author = await _authorRepository.GetByIdAsync(id);
-        ValidationHelper.AuthorValidation(author);
-        return author;
-    }
+        var user = await _employeeService.GetEmployeeByEmail(editAuthorRequest.AdminEmail);
+        ValidationHelper.UserValidation(user, editAuthorRequest.AdminEmail, true);
 
-    public async Task<IEnumerable<Author>> GetAllAuthors()
-    {
-        return await _authorRepository.LoadAsync();
-    }
-
-    public async Task UpdateAuthor(string Email, Guid id)
-    {
-        var user = await _employeeService.GetEmployeeByEmail(Email);
-        ValidationHelper.UserValidation(user, Email, true);
-
-        var author = await _authorRepository.GetByIdAsync(id);
+        var author = await _authorRepository.GetByIdAsync(editAuthorRequest.id);
         ValidationHelper.AuthorValidation(author);
 
         await _authorRepository.UpdateAsync(author);
+        return new CoommandResult();
     }
 
-    public async Task<CoommandResult> DeleteAuthor(string Email, Guid id)
+    public async Task<CoommandResult> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
     {
-        var user = await _employeeService.GetEmployeeByEmail(Email);
-        ValidationHelper.UserValidation(user, Email, true);
+        var user = await _employeeService.GetEmployeeByEmail(deleteAuthorRequest.AdminEmail);
+        ValidationHelper.UserValidation(user, deleteAuthorRequest.AdminEmail, true);
 
-        var author = await _authorRepository.GetByIdAsync(id);
+        var author = await _authorRepository.GetByIdAsync(deleteAuthorRequest.id);
         ValidationHelper.AuthorValidation(author);
 
         await _authorRepository.RemoveAsync(author);
         return new CoommandResult { IsSuccess = true };
+    }
+
+    public async Task<GetAuthorResponse?> GetAuthorById(Guid id)
+    {
+        var author = await _authorRepository.GetByIdAsync(id);
+
+        if (author != null)
+        {
+            return new GetAuthorResponse()
+            {
+                Firstname = author.Firstname,
+                LastName = author.LastName,
+                id = author.Id
+            };
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public async Task<IEnumerable<GetAuthorResponse>?> GetAllAuthors()
+    {
+        var result = await _authorRepository.LoadAsync();
+
+        if (result.Any())
+        {
+            return result.Select(x => new GetAuthorResponse()
+            {
+                Firstname = x.Firstname,
+                LastName = x.LastName,
+                id = x.Id
+            });
+        }
+        return null;
     }
 }

@@ -1,63 +1,39 @@
-﻿using Library.Models.Models.Books;
+﻿using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
-using Library.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Library.Api.Controllers
+namespace Library.Api.Controllers;
+
+
+[ApiController]
+[Route("api/[controller]")]
+public class BookController : ControllerBase
 {
+    private readonly IBookService _bookService;
 
-    [ApiController]
-    [Route("api/[controller]")]
-    public class BookController : ControllerBase
+    public BookController(IBookService bookService)
     {
-        private readonly IBookService _bookService;
-
-        public BookController(IBookService bookService)
-        {
-            _bookService = bookService;
-        }
-
-        [HttpPost]
-        [Route("CreateBook")]
-        public async Task<IActionResult> CreateBook(Book book)
-        {
-            await _bookService.CreateBook(book);
-            return Ok();
-        }
-
-        [HttpGet]
-        [Route("GetBookById/{id}")]
-        public async Task<IActionResult> GetBookById(Guid id)
-        {
-            var book = await _bookService.GetBookById(id);
-            if (book == null)
-                return NotFound();
-
-            return Ok(book);
-        }
-
-        [HttpGet]
-        [Route("GetAllBooks")]
-        public async Task<IActionResult> GetAllBooks()
-        {
-            var books = await _bookService.GetAllBooks();
-            return Ok(books);
-        }
-
-        [HttpPut]
-        [Route("UpdateBook")]
-        public async Task<IActionResult> UpdateBook(Book book)
-        {
-            await _bookService.UpdateBook(book);
-            return Ok();
-        }
-        [HttpDelete]
-        [Route("DeleteBook")]
-        public async Task<IActionResult> DeleteBook(Book book)
-        {
-            await _bookService.DeleteBook(book);
-            return Ok();
-        }
+        _bookService = bookService;
     }
 
+    [HttpPost]
+    public async Task<IActionResult> CreateBook(CreateBookRequest createBookModel)
+        => Ok(await _bookService.CreateBook(createBookModel));
+
+
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBookById(Guid id)
+    => Ok(await _bookService.GetBookById(id));
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllBooks()
+        => Ok(await _bookService.GetAllBooks());
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateBook(UpdateBookRequest updateBookRequest)
+        => Ok(await _bookService.UpdateBook(updateBookRequest));
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteBook(DeleteBookRequest deleteBookRequest)
+        => Ok(await _bookService.DeleteBook(deleteBookRequest));
 }

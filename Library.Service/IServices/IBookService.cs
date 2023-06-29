@@ -1,12 +1,14 @@
-﻿using Library.Models.Models.Books;
+﻿using Library.Models;
+using Library.Models.Models.Books;
+using Library.Models.Models.Books.CommandModel;
 
 namespace Library.Service.IServices;
 
 public interface IBookService
 {
-    Task CreateBook(Book book);
-    Task UpdateBook(Book book);
-    Task DeleteBook(Book book);
-    Task<Book> GetBookById(Guid id);
-    Task<IEnumerable<Book>> GetAllBooks();
+    Task<CoommandResult> CreateBook(CreateBookRequest createBookModel);
+    Task<CoommandResult> UpdateBook(UpdateBookRequest updateBookRequest);
+    Task<CoommandResult> DeleteBook(DeleteBookRequest deleteBookRequest);
+    Task<GetBookResponse> GetBookById(Guid id);
+    Task<IEnumerable<GetBookResponse>> GetAllBooks();
 }

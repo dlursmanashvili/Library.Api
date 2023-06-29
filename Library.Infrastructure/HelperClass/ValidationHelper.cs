@@ -14,6 +14,6 @@ public static class ValidationHelper
 
     public static void AuthorValidation(Author? author)
     {
-        if (author == null) throw new Exception($"author not found.");    
+        if (author == null) throw new Exception($"author not found.");
     }
 }

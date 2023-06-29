@@ -2,6 +2,6 @@
 
 public class CoommandResult
 {
-    public bool IsSuccess { get; set; } = false;
-    public string? SuccessMassage { get; set; } = null;
+    public bool IsSuccess { get; set; } = true;
+    public string? SuccessMassage { get; set; } = "is successful";
 }
