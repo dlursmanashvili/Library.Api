@@ -1,4 +1,5 @@
-﻿using Library.Infrastructure.Repositories.Interfaces;
+﻿using Library.Infrastructure.FileManagement;
+using Library.Infrastructure.Repositories.Interfaces;
 using Library.Infrastructure.Repositories.Repository;
 using Library.Service.IServices;
 using Library.Service.Services;
@@ -14,6 +15,7 @@ public static class DI
         services.AddScoped<IBookAuthorService, BookAuthorService>();
         services.AddScoped<IEmployeeService, EmployeeService>();
         services.AddScoped<IAuthentification, Authentification>();
+        services.AddScoped<IFileService, FileService>();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IBookRepository, BookRepository>();

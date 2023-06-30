@@ -13,9 +13,11 @@ public class BookService : IBookService
     private readonly IBookRepository _bookRepository;
     private readonly IEmployeeService _employeeService;
     private readonly IFileService _fileService;
-    public BookService(IBookRepository bookRepository)
+    public BookService(IBookRepository bookRepository, IFileService fileService, IEmployeeService employeeService)
     {
         _bookRepository = bookRepository;
+        _fileService = fileService;
+        _employeeService = employeeService;
     }
 
     public async Task<CoommandResult> CreateBook(CreateBookRequest createBookModel)
@@ -51,6 +53,7 @@ public class BookService : IBookService
         book.Rating = updateBookRequest.Rating;
         book.Description = updateBookRequest.Description;
         book.InLibrary = updateBookRequest.InLibrary;
+        book.IsDeleted = updateBookRequest.IsDeleted;
 
         await _bookRepository.UpdateAsync(book);
         return new CoommandResult();
@@ -70,7 +73,7 @@ public class BookService : IBookService
     }
     public async Task<GetBookResponse?> GetBookById(Guid id)
     {
-        var result  = await _bookRepository.GetByIdAsync(id);
+        var result = await _bookRepository.GetByIdAsync(id);
         if (result != null)
         {
             return new GetBookResponse()
@@ -106,4 +109,82 @@ public class BookService : IBookService
         }
         return new List<GetBookResponse>();
     }
+
+    public async Task<CoommandResult> GetBookStatus(GetBookStatusResponse getBookStatusResponse)
+    {
+        var result = new CoommandResult();
+        var book = await _bookRepository.GetByIdAsync(getBookStatusResponse.BookId);
+        if (book == null)
+        {
+            result = new CoommandResult()
+            {
+                IsSuccess = false,
+                SuccessMassage = $"Book  bot found"
+            };
+        }
+        if (book.IsDeleted)
+        {
+            result = new CoommandResult()
+            {
+                IsSuccess = false,
+                SuccessMassage = $"Book IsDeleted"
+            };
+        }
+        if (book.InLibrary == true)
+            result = new CoommandResult()
+            {
+                IsSuccess = true,
+                SuccessMassage = $"Book In Libray"
+            };
+
+        if (book.InLibrary == false)
+            result = new CoommandResult()
+            {
+                IsSuccess = true,
+                SuccessMassage = $"The book is not in the library"
+            };
+        return result;
+    }
+
+    public async Task<CoommandResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest)
+    {
+        var book = await _bookRepository.GetByIdAsync(updateBookStatusRequest.BookId);
+        if (book == null)
+        {
+            return new CoommandResult()
+            {
+                IsSuccess = false,
+                SuccessMassage = $"Book  bot found"
+            };
+        }
+        if (book.IsDeleted)
+        {
+            return new CoommandResult()
+            {
+                IsSuccess = false,
+                SuccessMassage = $"Book IsDeleted"
+            };
+        }
+        book.InLibrary = updateBookStatusRequest.BookStatus;
+        await _bookRepository.UpdateAsync(book);
+
+        if (updateBookStatusRequest.BookStatus == true)
+        {
+            return new CoommandResult()
+            {
+                IsSuccess = true,
+                SuccessMassage = $"Book Status update is successful book InLibrary "
+            };
+        }
+        else
+        {
+            return new CoommandResult()
+            {
+                IsSuccess = true,
+                SuccessMassage = $"Book Status update is successful book InLibrary "
+            };
+        }
+
+    }
+
 }

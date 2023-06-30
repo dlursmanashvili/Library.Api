@@ -3,5 +3,9 @@
 public class EditAuthorRequest
 {
     public string AdminEmail { get; set; }
-    public Guid id { get; set; }
+    public Guid AuthorID { get; set; }
+    public string Firstname { get; set; }
+    public string LastName { get; set; }
+    public DateTime BirthDate { get; set; }
+    public bool IsDeleted { get; set; }
 }

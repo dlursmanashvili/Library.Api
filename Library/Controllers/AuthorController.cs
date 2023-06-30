@@ -1,4 +1,5 @@
-﻿using Library.Models.Models.Authors.CommandModel;
+﻿using Library.Infrastructure.Repositories.Interfaces;
+using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,10 @@ namespace Library.Api.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
-
+       
         public AuthorController(IAuthorService authorService)
         {
-            _authorService = authorService;
+            _authorService = authorService;          
         }
 
         [HttpPost]

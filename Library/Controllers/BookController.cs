@@ -1,4 +1,6 @@
-﻿using Library.Models.Models.Books.CommandModel;
+﻿using Library.Infrastructure.FileManagement;
+using Library.Infrastructure.Repositories.Interfaces;
+using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,10 +12,10 @@ namespace Library.Api.Controllers;
 public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
-
+  
     public BookController(IBookService bookService)
     {
-        _bookService = bookService;
+        _bookService = bookService;        
     }
 
     [HttpPost]
@@ -25,15 +27,26 @@ public class BookController : ControllerBase
     public async Task<IActionResult> GetBookById(Guid id)
     => Ok(await _bookService.GetBookById(id));
 
-    [HttpGet]
-    public async Task<IActionResult> GetAllBooks()
-        => Ok(await _bookService.GetAllBooks());
-
     [HttpPut]
     public async Task<IActionResult> UpdateBook(UpdateBookRequest updateBookRequest)
         => Ok(await _bookService.UpdateBook(updateBookRequest));
+    [HttpPut]
+    [Route("EditBookStatus")]
+    public async Task<IActionResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest)
+    => Ok(await _bookService.EditBookStatus(updateBookStatusRequest));
+   
+    [HttpGet]
+    [Route("GetAllBooks")]
+    public async Task<IActionResult> GetAllBooks()
+        => Ok(await _bookService.GetAllBooks()); 
+
+    [HttpGet]
+    [Route("GetBookStatus")]
+    public async Task<IActionResult> GetBookStatus(GetBookStatusResponse getBookStatusResponse)
+     => Ok(await _bookService.GetBookStatus(getBookStatusResponse));
 
     [HttpDelete]
     public async Task<IActionResult> DeleteBook(DeleteBookRequest deleteBookRequest)
-        => Ok(await _bookService.DeleteBook(deleteBookRequest));
+       => Ok(await _bookService.DeleteBook(deleteBookRequest));
+
 }

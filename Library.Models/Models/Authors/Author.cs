@@ -9,7 +9,9 @@ public class Author : BaseEntity<Guid>
     public string Firstname { get; set; }
     [Required]
     public string LastName { get; set; }
-    [Required]
+
+    public DateTime BirthDate { get; set; }
+
     public List<BookAuthor> BookAuthors { get; set; }
 
 }

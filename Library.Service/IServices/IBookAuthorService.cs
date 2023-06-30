@@ -1,12 +1,15 @@
-﻿using Library.Models.Models.BookAuthors;
+﻿using Library.Models;
+using Library.Models.Models.BookAuthors;
+using Library.Models.Models.BookAuthors.CommandModel;
+using Library.Models.Models.Employee.CommandModel;
 
 namespace Library.Service.IServices;
 
 public interface IBookAuthorService
 {
-    Task CreateBookAuthor(BookAuthor bookAuthor);
-    Task UpdateBookAuthor(BookAuthor bookAuthor);
-    Task DeleteBookAuthor(BookAuthor bookAuthor);
-    Task<BookAuthor> GetBookAuthorById(Guid id);
-    Task<IEnumerable<BookAuthor>> GetAllBookAuthor();
+    Task<CoommandResult> CreateBookAuthor(CreateBookAuthorRequest createBookAuthorRequest);
+    Task<CoommandResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest);
+    Task<CoommandResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest);
+    Task<GetBookAuthorResponse> GetBookAuthorById(Guid idBookAutrhorID);
+    Task<IEnumerable<GetBookAuthorResponse>?> GetAllBookAuthor();
 }

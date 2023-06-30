@@ -9,4 +9,5 @@ public class UpdateBookRequest
     public string? Description { get; set; }
     public bool InLibrary { get; set; }
     public string AdminEmail { get; set; }
+    public bool  IsDeleted { get; set; }
 }

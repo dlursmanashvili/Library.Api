@@ -1,4 +1,6 @@
-﻿using Library.Service.IServices;
+﻿using Library.Infrastructure.Repositories.Interfaces;
+using Library.Models.Models.BookAuthors.CommandModel;
+using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.Api.Controllers;
@@ -9,55 +11,32 @@ namespace Library.Api.Controllers;
 public class BookAuthorController : ControllerBase
 {
     private readonly IBookAuthorService _bookAuthorService;
-
+   
     public BookAuthorController(IBookAuthorService bookAuthorService)
     {
         _bookAuthorService = bookAuthorService;
+       
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> CreateBookAuthor(BookAuthor bookAuthor)
-    //{
-    //    await _bookAuthorService.CreateBookAuthor(bookAuthor);
+    [HttpPost]
+    public async Task<IActionResult> CreateBookAuthor(CreateBookAuthorRequest createBookAuthorRequest)
+         => Ok(await _bookAuthorService.CreateBookAuthor(createBookAuthorRequest));
 
-    //    return Ok();
-    //}
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetBookAuthorById(Guid id)
+        => Ok(await _bookAuthorService.GetBookAuthorById(id));
 
-    //[HttpGet]
-    //public async Task<IActionResult> GetBookAuthorById(Guid id) => Ok(await _bookAuthorService.GetBookAuthorById(id));
-
-    //[HttpGet]
-    //public async Task<IActionResult> GetAllBookAuthors()
-    //    => Ok(await _bookAuthorService.GetAllBookAuthor());
+    [HttpGet]
+    public async Task<IActionResult> GetAllBookAuthors()
+        => Ok(await _bookAuthorService.GetAllBookAuthor());
 
 
-    //[HttpPut]
-    //[Route("UpdateBookAuthor/{id}")]
-    //public async Task<IActionResult> UpdateBookAuthor(Guid id, BookAuthor bookAuthor)
-    //{
-    //    if (id != bookAuthor.Id)
-    //    {
-    //        return BadRequest();
-    //    }
+    [HttpPut]
+    public async Task<IActionResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest)
+        => Ok(await _bookAuthorService.UpdateBookAuthor(editBookAuthorRequest));
 
-    //    await _bookAuthorService.UpdateBookAuthor(bookAuthor);
 
-    //    return Ok();
-    //}
-
-    //[HttpDelete]
-    //[Route("DeleteBookAuthor/{id}")]
-    //public async Task<IActionResult> DeleteBookAuthor(Guid id)
-    //{
-    //    var bookAuthor = await _bookAuthorService.GetBookAuthorById(id);
-
-    //    if (bookAuthor == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    await _bookAuthorService.DeleteBookAuthor(bookAuthor);
-
-    //    return Ok();
-    //}
+    [HttpDelete]
+    public async Task<IActionResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
+        => Ok(await _bookAuthorService.DeleteBookAuthor(deleteBookAuthorRequest));
 }

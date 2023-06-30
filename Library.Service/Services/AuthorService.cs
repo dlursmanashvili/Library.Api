@@ -1,7 +1,9 @@
 ﻿using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models;
+using Library.Models.Models.Authors;
 using Library.Models.Models.Authors.CommandModel;
+using Library.Models.Models.BookAuthors;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;
@@ -11,9 +13,10 @@ public class AuthorService : IAuthorService
     private readonly IAuthorRepository _authorRepository;
 
     private readonly IEmployeeService _employeeService;
-    public AuthorService(IAuthorRepository authorRepository)
+    public AuthorService(IAuthorRepository authorRepository, IEmployeeService employeeService)
     {
         _authorRepository = authorRepository;
+        _employeeService = employeeService;
     }
 
     public async Task<CoommandResult> CreateAuthor(CreateAuthorRequest createAuthorRequest)
@@ -32,10 +35,18 @@ public class AuthorService : IAuthorService
         var user = await _employeeService.GetEmployeeByEmail(editAuthorRequest.AdminEmail);
         ValidationHelper.UserValidation(user, editAuthorRequest.AdminEmail, true);
 
-        var author = await _authorRepository.GetByIdAsync(editAuthorRequest.id);
+        var author = await _authorRepository.GetByIdAsync(editAuthorRequest.AuthorID);
         ValidationHelper.AuthorValidation(author);
 
-        await _authorRepository.UpdateAsync(author);
+        await _authorRepository.UpdateAsync(new Author()
+        {
+            Id = author.Id,
+            BirthDate = editAuthorRequest.BirthDate,
+            Firstname = editAuthorRequest.Firstname,
+            LastName = editAuthorRequest.LastName,
+            IsDeleted = editAuthorRequest.IsDeleted,
+            BookAuthors = author.BookAuthors,
+        });
         return new CoommandResult();
     }
 
