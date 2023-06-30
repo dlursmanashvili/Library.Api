@@ -50,26 +50,19 @@ public class BookAuthorService : IBookAuthorService
         if (result == null || result.IsDeleted == true)
             throw new NotFoundException("Result Not Faund");
 
-        var book = await _bookRepository.GetByIdAsync(result.BookId);
-        if (book == null || book.IsDeleted == true)
-            throw new Exception("Book not found");
+        //var book = await _bookRepository.GetByIdAsync(result.BookId);
+        //if (book == null || book.IsDeleted == true)
+        //    throw new Exception("Book not found");
 
-        var author = await _authorRepository.GetByIdAsync(result.AuthorId);
-        if (author == null || author.IsDeleted == true)
-            throw new Exception("Author not found");
+        //var author = await _authorRepository.GetByIdAsync(result.AuthorId);
+        //if (author == null || author.IsDeleted == true)
+        //    throw new Exception("Author not found");
 
         return new GetBookAuthorResponse()
-        {
-            AuthorFirstname = result.Author.Firstname,
-            AuthorLastName = result.Author.LastName,
-            AuthorId = result.Author.Id,
-            BookDescription = result.Book.Description,
-            BookId = result.Book.Id,
-            BookInLibrary = result.Book.InLibrary,
-            BookPublicationDate = result.Book.PublicationDate,
-            BookRating = result.Book.Rating,
-            BookTitle = result.Book.Title,
-            BirthDate = result.Author.BirthDate,
+        {           
+            AuthorId = result.AuthorId,
+            BookId = result.BookId,
+           
         };
     }
 
@@ -79,25 +72,17 @@ public class BookAuthorService : IBookAuthorService
         if (!bookAuthors.Any())
             throw new Exception("bookAuthor not found");
 
-        var result = bookAuthors.Where(x => x.IsDeleted == false && x.Author.IsDeleted == false && x.Book.IsDeleted == false)
+        var result = bookAuthors.Where(x => x.IsDeleted == false)
                     ?.Select(x => new GetBookAuthorResponse()
-                    {
-                        AuthorFirstname = x.Author.Firstname,
-                        AuthorLastName = x.Author.LastName,
-                        AuthorId = x.Author.Id,
-                        BookDescription = x.Book.Description,
-                        BookId = x.Book.Id,
-                        BookInLibrary = x.Book.InLibrary,
-                        BookPublicationDate = x.Book.PublicationDate,
-                        BookRating = x.Book.Rating,
-                        BookTitle = x.Book.Title,
-                        BirthDate = x.Author.BirthDate
-                    })?.ToList();
+                    {                      
+                        AuthorId = x.AuthorId,
+                        BookId = x.BookId,                      
+                    });
 
         if (!result.Any())
             throw new Exception("bookAuthor not found");
 
-        return result;
+        return result.ToList();
     }
 
     public async Task<CoommandResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest)

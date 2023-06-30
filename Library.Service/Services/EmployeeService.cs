@@ -26,6 +26,15 @@ public class EmployeeService : IEmployeeService
     public async Task<CoommandResult> UpdateEmployee(EditEmployeeRequest editEmployeeRequest)
     {
         var user = await _employeeRepository.GetEmployeeByEmail(editEmployeeRequest.AdminEmail);
+        if (user == null)
+        {
+            throw new Exception("user not found");
+
+        }
+        if (user.Email == "SuperAdmin@gmail.com")
+        {
+            throw new Exception("SuperAdmin@gmail.com not Updated");
+        }
         ValidationHelper.UserValidation(user, editEmployeeRequest.AdminEmail, true);
 
         var UpdateItem = await _employeeRepository.GetByIdAsync(editEmployeeRequest.UserID);

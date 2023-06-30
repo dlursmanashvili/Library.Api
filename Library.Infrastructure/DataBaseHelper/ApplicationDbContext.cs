@@ -15,18 +15,17 @@ public class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<BookAuthor>()
-                .HasKey(ba => new { ba.BookId, ba.AuthorId });
-
-        modelBuilder.Entity<BookAuthor>()
-            .HasOne(ba => ba.Book)
-            .WithMany(b => b.BookAuthors)
+        modelBuilder.Entity<Book>()
+            .HasMany(x => x.BookAuthors)
+            .WithOne()
             .HasForeignKey(ba => ba.BookId);
 
-        modelBuilder.Entity<BookAuthor>()
-            .HasOne(ba => ba.Author)
-            .WithMany(a => a.BookAuthors)
+        modelBuilder.Entity<Author>()
+            .HasMany(x => x.BookAuthors)
+            .WithOne()
             .HasForeignKey(ba => ba.AuthorId);
+
+        modelBuilder.Entity<BookAuthor>().HasKey(sc => new { sc.BookId, sc.AuthorId });
 
         SecurityHelper.CreatePasswordHash("123", out byte[] passwordHash, out byte[] passwordSalt);
 
