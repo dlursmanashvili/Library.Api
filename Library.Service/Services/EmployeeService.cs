@@ -43,6 +43,10 @@ public class EmployeeService : IEmployeeService
     public async Task<CoommandResult> DeleteEmployee(DeleteEmployeeRequest deleteEmployeeRequest)
     {
         var user = await _employeeRepository.GetEmployeeByEmail(deleteEmployeeRequest.AdminEmail);
+        if (user.Email == "SuperAdmin@gmail.com")
+        {
+            throw new Exception("SuperAdmin@gmail.com not deleted");
+        }
         ValidationHelper.UserValidation(user, deleteEmployeeRequest.AdminEmail, true);
 
         var RemoveItem = await _employeeRepository.GetByIdAsync(deleteEmployeeRequest.id);

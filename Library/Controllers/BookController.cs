@@ -23,7 +23,8 @@ public class BookController : ControllerBase
         => Ok(await _bookService.CreateBook(createBookModel));
 
 
-    [HttpGet("{id}")]
+    [HttpGet]
+    [Route("GetBookById/{id}")]
     public async Task<IActionResult> GetBookById(Guid id)
     => Ok(await _bookService.GetBookById(id));
 
@@ -41,9 +42,10 @@ public class BookController : ControllerBase
         => Ok(await _bookService.GetAllBooks()); 
 
     [HttpGet]
-    [Route("GetBookStatus")]
-    public async Task<IActionResult> GetBookStatus(GetBookStatusResponse getBookStatusResponse)
-     => Ok(await _bookService.GetBookStatus(getBookStatusResponse));
+    [Route("GetBookStatus/{id}")]
+
+    public async Task<IActionResult> GetBookStatus(Guid id)
+     => Ok(await _bookService.GetBookStatus(id));
 
     [HttpDelete]
     public async Task<IActionResult> DeleteBook(DeleteBookRequest deleteBookRequest)

@@ -5,6 +5,7 @@ using Library.Models.Models.Employee;
 using Library.Service.IServices;
 
 using Microsoft.Extensions.Configuration;
+using System.Reflection.Metadata;
 
 namespace Library.Service.Services;
 
@@ -36,8 +37,12 @@ public class Authentification : IAuthentification
 
     public async Task<AuthResponse> Register(RegistrationRequest request)
     {
+        if (!request.Email.Contains("@") )
+        {
+            throw new NotFoundException("email no tcorrect");
+        }
         if (await _employeeService.GetEmployeeByEmail(request.Email) != null)
-            throw new Exception($"ServiceEmail {request.Email} already exists.");
+            throw new Exception($"Email {request.Email} already exists.");
 
         SecurityHelper.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 

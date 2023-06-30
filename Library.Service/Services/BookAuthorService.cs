@@ -26,7 +26,9 @@ public class BookAuthorService : IBookAuthorService
     public async Task<CoommandResult> CreateBookAuthor(CreateBookAuthorRequest bookAuthor)
     {
         var user = await _employeeRepository.GetEmployeeByEmail(bookAuthor.AdminMail);
-        ValidationHelper.UserValidation(user, user.Email, true);
+        if (user == null)
+            throw new NotFoundException(" user not found");
+        ValidationHelper.UserValidation(user, bookAuthor.AdminMail, true);
 
         var book = await _bookRepository.GetByIdAsync(bookAuthor.BookId);
         if (book == null) throw new Exception("Book not found");
@@ -67,14 +69,13 @@ public class BookAuthorService : IBookAuthorService
             BookPublicationDate = result.Book.PublicationDate,
             BookRating = result.Book.Rating,
             BookTitle = result.Book.Title,
-            BirthDate =result.Author.BirthDate,
+            BirthDate = result.Author.BirthDate,
         };
     }
 
     public async Task<IEnumerable<GetBookAuthorResponse>?> GetAllBookAuthor()
     {
         var bookAuthors = await _bookAuthorRepository.LoadAsync();
-
         if (!bookAuthors.Any())
             throw new Exception("bookAuthor not found");
 
@@ -101,7 +102,10 @@ public class BookAuthorService : IBookAuthorService
 
     public async Task<CoommandResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest)
     {
+        ValidationHelper.GetNullParameterName(editBookAuthorRequest);
         var user = await _employeeRepository.GetEmployeeByEmail(editBookAuthorRequest.AdminMail);
+        if (user == null)
+            throw new NotFoundException("admin user not found");
         ValidationHelper.UserValidation(user, user.Email, true);
 
         var result = _bookAuthorRepository.GetByIdAsync(editBookAuthorRequest.bookAuthorID);
@@ -132,7 +136,7 @@ public class BookAuthorService : IBookAuthorService
     public async Task<CoommandResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
     {
         var user = await _employeeRepository.GetEmployeeByEmail(deleteBookAuthorRequest.AdminMail);
-        ValidationHelper.UserValidation(user, user.Email, true);
+        ValidationHelper.UserValidation(user, deleteBookAuthorRequest.AdminMail, true);
 
         var book = await _bookRepository.GetByIdAsync(deleteBookAuthorRequest.BookId);
         if (book != null)

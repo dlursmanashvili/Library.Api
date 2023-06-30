@@ -11,5 +11,5 @@ public interface IBookService
     Task<CoommandResult> UpdateBook(UpdateBookRequest updateBookRequest);
     Task<CoommandResult> DeleteBook(DeleteBookRequest deleteBookRequest);
     Task<CoommandResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest);
-    Task<CoommandResult> GetBookStatus(GetBookStatusResponse getBookStatusResponse);
+    Task<CoommandResult> GetBookStatus(Guid getBookStatusResponse);
 }

@@ -2,6 +2,7 @@
 using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models;
+using Library.Models.Exceptions;
 using Library.Models.Models.Books;
 using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
@@ -23,6 +24,8 @@ public class BookService : IBookService
     public async Task<CoommandResult> CreateBook(CreateBookRequest createBookModel)
     {
         var user = await _employeeService.GetEmployeeByEmail(createBookModel.AdminEmail);
+        if (user == null)
+            throw new NotFoundException(" user not found");
         ValidationHelper.UserValidation(user, createBookModel.AdminEmail, true);
 
         var book = new Book()
@@ -74,46 +77,51 @@ public class BookService : IBookService
     public async Task<GetBookResponse?> GetBookById(Guid id)
     {
         var result = await _bookRepository.GetByIdAsync(id);
-        if (result != null)
+        if (result == null)
         {
-            return new GetBookResponse()
-            {
-                Rating = result.Rating,
-                Description = result.Description,
-                InLibrary = result.InLibrary,
-                FilePath = result.FilePath,
-                PublicationDate = result.PublicationDate,
-                Title = result.Title,
-            };
+            throw new Exception("Book not found");
         }
-        return null;
-    }
 
+        return new GetBookResponse()
+        {
+            Rating = result.Rating,
+            Description = result.Description,
+            InLibrary = result.InLibrary,
+            FilePath = result.FilePath,
+            PublicationDate = result.PublicationDate,
+            Title = result.Title,
+        };
+    }
     public async Task<IEnumerable<GetBookResponse>> GetAllBooks()
     {
         var result = await _bookRepository.LoadAsync();
+
+        if (result == null)
+        {
+            throw new Exception("Books not found");
+        }
 
         if (result.Any())
         {
             return result.Select(x =>
             new GetBookResponse
             {
+                BookID = x.Id,
                 Title = x.Title,
                 Description = x.Description,
                 InLibrary = x.InLibrary,
                 FilePath = x.FilePath,
                 PublicationDate = x.PublicationDate,
                 Rating = x.Rating
-
             }).ToList();
         }
         return new List<GetBookResponse>();
     }
 
-    public async Task<CoommandResult> GetBookStatus(GetBookStatusResponse getBookStatusResponse)
+    public async Task<CoommandResult> GetBookStatus(Guid getBookStatusResponse)
     {
         var result = new CoommandResult();
-        var book = await _bookRepository.GetByIdAsync(getBookStatusResponse.BookId);
+        var book = await _bookRepository.GetByIdAsync(getBookStatusResponse);
         if (book == null)
         {
             result = new CoommandResult()

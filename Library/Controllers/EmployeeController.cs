@@ -20,7 +20,7 @@ public class EmployeeController : Controller
         => Ok(await _employeeService.GetEmployeeById(id));
 
 
-    [HttpGet("{AdminEmail}")]    
+    [HttpGet("GetAll/{AdminEmail}")]    
     public async Task<IActionResult> GetAllEmployees(string AdminEmail)
         => Ok(await _employeeService.GetAllEmployee(AdminEmail));
 

@@ -18,26 +18,25 @@ namespace Library.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateAuthor(CreateAuthorRequest createAuthorRequest)
-           => Ok(await _authorService.CreateAuthor(createAuthorRequest));
+           => Ok(await _authorService.CreateAuthor(createAuthorRequest));      
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateAuthor(EditAuthorRequest editAuthorRequest)
+            => Ok(await _authorService.UpdateAuthor(editAuthorRequest));
+      
         [HttpGet]
         [Route("GetAuthorById/{id}")]
         public async Task<IActionResult> GetAuthorById(Guid id)
-            => Ok(await _authorService.GetAuthorById(id));
+          => Ok(await _authorService.GetAuthorById(id));
 
         [HttpGet]
         [Route("GetAllAuthors")]
         public async Task<IActionResult> GetAllAuthors()
             => Ok(await _authorService.GetAllAuthors());
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAuthor(EditAuthorRequest editAuthorRequest)
-            => Ok(await _authorService.UpdateAuthor(editAuthorRequest));
-
-
         [HttpDelete]
         public async Task<IActionResult> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
-            => Ok(await _authorService.DeleteAuthor(deleteAuthorRequest));
+          => Ok(await _authorService.DeleteAuthor(deleteAuthorRequest));
 
     }
 }
