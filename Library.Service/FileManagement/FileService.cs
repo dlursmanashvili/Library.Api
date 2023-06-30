@@ -1,7 +1,7 @@
 ﻿using Library.Models.Exceptions;
 using Microsoft.AspNetCore.Http;
 
-namespace Library.Infrastructure.FileManagement;
+namespace Library.Service.FileManagement;
 public class FileService : IFileService
 {
     public async Task<string> UploadFile(IFormFile file)
@@ -22,7 +22,7 @@ public class FileService : IFileService
 
         // directory path - destination, where uploaded file will be stored.
         // ensure if folder exists or not, if not- create it.
-        var directoryPath = @"C:\";
+        var directoryPath = @"C:\Users\MyWorkOffice\Desktop\test\";
         if (!Directory.Exists(directoryPath))
         {
             Directory.CreateDirectory(directoryPath);

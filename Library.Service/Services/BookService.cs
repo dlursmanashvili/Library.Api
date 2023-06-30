@@ -1,10 +1,10 @@
-﻿using Library.Infrastructure.FileManagement;
-using Library.Infrastructure.HelperClass;
+﻿using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models;
 using Library.Models.Exceptions;
 using Library.Models.Models.Books;
 using Library.Models.Models.Books.CommandModel;
+using Library.Service.FileManagement;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;
@@ -36,6 +36,7 @@ public class BookService : IBookService
             Rating = createBookModel.Rating,
             Description = createBookModel.Description,
             InLibrary = true,
+            Image =createBookModel.iamge
         };
 
         await _bookRepository.AddAsync(book);
@@ -57,6 +58,7 @@ public class BookService : IBookService
         book.Description = updateBookRequest.Description;
         book.InLibrary = updateBookRequest.InLibrary;
         book.IsDeleted = updateBookRequest.IsDeleted;
+        book.Image= updateBookRequest.Image;
 
         await _bookRepository.UpdateAsync(book);
         return new CoommandResult();
@@ -90,6 +92,7 @@ public class BookService : IBookService
             FilePath = result.FilePath,
             PublicationDate = result.PublicationDate,
             Title = result.Title,
+            Image= result.Image,
         };
     }
     public async Task<IEnumerable<GetBookResponse>> GetAllBooks()
@@ -112,7 +115,8 @@ public class BookService : IBookService
                 InLibrary = x.InLibrary,
                 FilePath = x.FilePath,
                 PublicationDate = x.PublicationDate,
-                Rating = x.Rating
+                Rating = x.Rating,
+                Image = x.Image,
             }).ToList();
         }
         return new List<GetBookResponse>();

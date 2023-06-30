@@ -1,6 +1,4 @@
-﻿using Library.Infrastructure.FileManagement;
-using Library.Infrastructure.Repositories.Interfaces;
-using Library.Models.Models.Books.CommandModel;
+﻿using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,10 +10,10 @@ namespace Library.Api.Controllers;
 public class BookController : ControllerBase
 {
     private readonly IBookService _bookService;
-  
+
     public BookController(IBookService bookService)
     {
-        _bookService = bookService;        
+        _bookService = bookService;
     }
 
     [HttpPost]
@@ -35,11 +33,11 @@ public class BookController : ControllerBase
     [Route("EditBookStatus")]
     public async Task<IActionResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest)
     => Ok(await _bookService.EditBookStatus(updateBookStatusRequest));
-   
+
     [HttpGet]
     [Route("GetAllBooks")]
     public async Task<IActionResult> GetAllBooks()
-        => Ok(await _bookService.GetAllBooks()); 
+        => Ok(await _bookService.GetAllBooks());
 
     [HttpGet]
     [Route("GetBookStatus/{id}")]

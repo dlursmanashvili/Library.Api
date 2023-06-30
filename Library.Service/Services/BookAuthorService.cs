@@ -4,7 +4,6 @@ using Library.Models;
 using Library.Models.Exceptions;
 using Library.Models.Models.BookAuthors;
 using Library.Models.Models.BookAuthors.CommandModel;
-using Library.Models.Models.Employee.CommandModel;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;
@@ -38,6 +37,7 @@ public class BookAuthorService : IBookAuthorService
 
         await _bookAuthorRepository.AddAsync(new BookAuthor()
         {
+            Id= new Guid(),
             BookId = book.Id,
             AuthorId = author.Id,
         });
@@ -59,10 +59,11 @@ public class BookAuthorService : IBookAuthorService
         //    throw new Exception("Author not found");
 
         return new GetBookAuthorResponse()
-        {           
+        {
+            BookAuthorID = result.Id,
             AuthorId = result.AuthorId,
             BookId = result.BookId,
-           
+
         };
     }
 
@@ -74,9 +75,10 @@ public class BookAuthorService : IBookAuthorService
 
         var result = bookAuthors.Where(x => x.IsDeleted == false)
                     ?.Select(x => new GetBookAuthorResponse()
-                    {                      
+                    {
+                        BookAuthorID = x.Id,
                         AuthorId = x.AuthorId,
-                        BookId = x.BookId,                      
+                        BookId = x.BookId,
                     });
 
         if (!result.Any())
@@ -94,7 +96,6 @@ public class BookAuthorService : IBookAuthorService
         ValidationHelper.UserValidation(user, user.Email, true);
 
         var result = _bookAuthorRepository.GetByIdAsync(editBookAuthorRequest.bookAuthorID);
-
         if (result == null)
         {
             throw new Exception("bookAuthor not found");

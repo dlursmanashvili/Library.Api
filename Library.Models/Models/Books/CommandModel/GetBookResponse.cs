@@ -4,7 +4,7 @@ public class GetBookResponse
 {
     public Guid BookID { get; set; }
     public string Title { get; set; }
-    //public string? Image { get; set; }
+    public string? Image { get; set; }
     public int? Rating { get; set; }
     public bool InLibrary { get; set; }
     public string? Description { get; set; }
