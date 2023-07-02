@@ -1,28 +1,40 @@
 ﻿{
-  "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:10324",
-      "sslPort": 44364
-    }
-  },
+  //"$schema": "https://json.schemastore.org/launchsettings.json",
+  //"iisSettings": {
+  //  "windowsAuthentication": false,
+  //  "anonymousAuthentication": true,
+  //  "iisExpress": {
+  //    "applicationUrl": "http://localhost:10324",
+  //    "sslPort": 44364
+  //  }
+  //},
+  //"profiles": {
+  //  "Library": {
+  //    "commandName": "Project
+  //    "dotnetRunMessages": true,
+  //    "launchBrowser": true,
+  //    "launchUrl": "swagger",
+  //    "applicationUrl": "https://localhost:7199;http://localhost:5087",
+  //    "environmentVariables": {
+  //      "ASPNETCORE_ENVIRONMENT": "Development"
+  //    }
+  //  },
+  //  "IIS Express": {
+  //    "commandName": "IISExpress",
+  //    "launchBrowser": true,
+  //    "launchUrl": "swagger",
+  //    "environmentVariables": {
+  //      "ASPNETCORE_ENVIRONMENT": "Development"
+  //    }
+  //  }
+  //}
   "profiles": {
     "Library": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7199;http://localhost:5087",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
+      "applicationUrl": "https://localhost:7199", //აქ რაც ეწერა, ამას ცვლი და აქ უთითებ ზუსტად იმ URL-ს, რომელიც გითჰაბზე მიუთითე, ჩემს შემთხვევაში ესაა. 
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
