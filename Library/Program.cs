@@ -23,14 +23,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
                                                                               .AllowAnyMethod()
                                                                               .AllowAnyHeader()));
-//add Oauth Configuration
-// სანამ ამას დაწერ, პირველი ნაბიჯი ისაა, რომ ხსნი გითჰაბს, შედიხარ სეთინგებში, სულ ბოლოში ირჩევ - <developer settings>, 
-// შემდეგ ირჩევ OAuthApps-ს და ქმნი მანდ ახალ აპლიკაციას. Homepage URL -ში ჩაწერე აპლიკაცია რა ორტზეც ეშვება, ეგ მისამართი,
-// მაგალითად - https://localhost:7199;
-// Authorization callback URL - საწყის ეტაპზე https://localhost:7199 - მერე შეცვლი. 
-// 
-//გითჰაპს რომ მორჩები და აპლიკაციას რომ დაარეგისტრირებ, შემდეგ დაიწყე ამ კონფიგურაციის წერა. 
-builder.Services.AddAuthentication("cookie")
+
+ builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie")
     .AddOAuth("github", options =>
     {
@@ -45,12 +39,8 @@ builder.Services.AddAuthentication("cookie")
         options.SaveTokens = true;
         options.UserInformationEndpoint = "https://api.github.com/user";
 
-        options.CallbackPath = "/oauth/github-cb"; //აქ შეგიძლია ნებისმიერი რამ ჩაწერო, Path-რაც გინდა რომ გქონდეს, უბრალოდ
-                                                   //როცა ამას დაწერე, იგივე უნდა აიღო და Authorization callback URL - სადაც ჩაწერე გითჰაბზე, იქ მიამატებ -
-                                                   // ანუ Authorization callback URL-ში  https://localhost:7199 ნაცვლად გექნება https://localhost:7199/oauth/github-cb 
-                                                   //ანუ რასაც მანდ დაწერ, იმას მიამატებ. შეგიძლია დატოვო ისე, როგორც არის. 
+        options.CallbackPath = "/oauth/github-cb";
 
-        //"Sub" stands for "subject"
         options.ClaimActions.MapJsonKey("sub", "id");
         options.ClaimActions.MapJsonKey(ClaimTypes.Name, "login");
 
@@ -87,7 +77,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 // ეს პირველი get - მეთოდი აუცილებელი არაა, უბრალოდ იმიტომ დავწერე რომ სადმე გადავემისამართებინე და ქლეიმები გამოეტანა.
-app.MapGet("/auth/homepage", (HttpContext ctx) =>
+var x= app.MapGet("/auth/homepage", (HttpContext ctx) =>
 {
     ctx.GetTokenAsync("access_token");
     return ctx.User.Claims.Select(x => new { x.Type, x.Value }).ToList();
@@ -97,7 +87,7 @@ app.MapGet("/auth/homepage", (HttpContext ctx) =>
 // აუცილებლად app.UseAuthentication(); ქვემოთ.
 
 
-app.MapGet("/auth/login", () =>
+var y=  app.MapGet("/auth/login", () =>
 {
     return Results.Challenge(
     new AuthenticationProperties()
@@ -123,4 +113,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-// რომ მორჩები, და აპლიკაციას გაუშვებ, ჩაწერე url-ში https://localhost:7199/auth/login და სასწაული მოხდება :D მანამდე გითჰაბიდან დალოგაუთდი
+//  აპლიკაციას  რომ გაუშვებ, ჩაწერე url-ში https://localhost:7199/auth/login და სასწაული მოხდება
+
+///////////// github user info 
+//Pass:aaaQQQ123!@#
+//Email: lursmanashvilidavitt@gmail.com
+//Username:bibliotekaapp

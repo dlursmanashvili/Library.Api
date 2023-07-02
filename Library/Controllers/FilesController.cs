@@ -16,7 +16,7 @@ namespace Library.Api.Controllers
         }
 
         #endregion
-
+        [Authorize]
         [HttpPost()]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
