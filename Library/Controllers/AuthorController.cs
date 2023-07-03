@@ -1,5 +1,4 @@
-﻿using Library.Models;
-using Library.Models.Models.Authors.CommandModel;
+﻿using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -73,7 +72,6 @@ namespace Library.Api.Controllers
         {
             await _authorService.DeleteAuthor(deleteAuthorRequest);
             return NoContent();
-
         }
 
     }

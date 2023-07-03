@@ -8,7 +8,6 @@ public class UpdateBookRequest
     public int? Rating { get; set; }
     public string? Description { get; set; }
     public bool InLibrary { get; set; }
-    public string AdminEmail { get; set; }
     public bool  IsDeleted { get; set; }
     public string? Image{ get; set; }
 }

@@ -3,5 +3,4 @@
 public class DeleteBookRequest
 {
     public Guid Bookid { get; set; }
-    public string AdminEmail { get; set; }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.Models.Models.Books.CommandModel;
 
-public class GetBookStatusResponse
+public class BookStatusResponse
 {
    public Guid BookId { get; set; }
 }

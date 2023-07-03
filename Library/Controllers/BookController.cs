@@ -16,43 +16,83 @@ public class BookController : ControllerBase
     {
         _bookService = bookService;
     }
+    /// <summary>
+    /// Create the Book.
+    /// </summary>
+    /// <param name="createBookRequest"></param>
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateBook(CreateBookRequest createBookModel)
-        => Ok(await _bookService.CreateBook(createBookModel));
+    [ProducesResponseType(typeof(BookResponse), 201)]
+    public async Task<IActionResult> Create(CreateBookRequest createBookRequest)
+    {
+        var result = await _bookService.CreateBook(createBookRequest);
+        return CreatedAtAction("GetAll", result);
+    }
 
+    /// <summary>
+    /// Updates info about Book.
+    /// </summary>
+    /// <param name="updateBookRequest"></param>
+    [Authorize]
+    [HttpPut]
+    [ProducesResponseType(typeof(BookResponse), 200)]
+    public async Task<IActionResult> Update(UpdateBookRequest updateBookRequest)
+      => Ok(await _bookService.UpdateBook(updateBookRequest));
+
+    /// <summary>
+    /// Gets current Book by given Id.
+    /// </summary>
+    /// <param name="id"></param>
     [Authorize]
     [HttpGet]
     [Route("GetBookById/{id}")]
-    public async Task<IActionResult> GetBookById(Guid id)
+    [ProducesResponseType(typeof(BookResponse), 200)]
+    public async Task<IActionResult> GetById(Guid id)
     => Ok(await _bookService.GetBookById(id));
-    
-    [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> UpdateBook(UpdateBookRequest updateBookRequest)
-        => Ok(await _bookService.UpdateBook(updateBookRequest));
-    
-    [Authorize]
-    [HttpPut]
-    [Route("EditBookStatus")]
-    public async Task<IActionResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest)
-    => Ok(await _bookService.EditBookStatus(updateBookStatusRequest));
-    
-    [Authorize]
-    [HttpGet]
-    [Route("GetAllBooks")]
-    public async Task<IActionResult> GetAllBooks()
-        => Ok(await _bookService.GetAllBooks());
-    
-    [Authorize]
-    [HttpGet]
-    [Route("GetBookStatus/{id}")]
-    public async Task<IActionResult> GetBookStatus(Guid id)
-     => Ok(await _bookService.GetBookStatus(id));
 
+    /// <summary>
+    /// Gets list of Books.
+    /// </summary>
+    [Authorize]
+    [HttpGet]
+    [Route("GetAll")]
+    [ProducesResponseType(typeof(BookResponse), 200)]
+    public async Task<IActionResult> GetAll()
+        => Ok(await _bookService.GetAllBooks());
+
+    /// <summary>
+    /// Delete Book
+    /// </summary>
+    /// <param name="deleteBookRequest"></param>
     [Authorize]
     [HttpDelete]
-    public async Task<IActionResult> DeleteBook(DeleteBookRequest deleteBookRequest)
-       => Ok(await _bookService.DeleteBook(deleteBookRequest));
+    [ProducesResponseType(204)]
+    public async Task<IActionResult> Delete(DeleteBookRequest deleteBookRequest)
+    {
+        await _bookService.DeleteBook(deleteBookRequest);
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Edit Status of Books.
+    /// </summary>
+    /// <param name="updateBookStatusRequest"></param>
+    [Authorize]
+    [HttpPut]
+    [Route("EditStatus")]
+    public async Task<IActionResult> EditStatus(UpdateBookStatusRequest updateBookStatusRequest)
+  => Ok(await _bookService.EditBookStatus(updateBookStatusRequest));
+
+    /// <summary>
+    /// Get Status of Books.
+    /// </summary>
+    /// <param name="id"></param>
+    [Authorize]
+    [HttpGet]
+    [Route("GetStatus/{id}")]
+    public async Task<IActionResult> GetStatus(Guid id)
+    => Ok(await _bookService.GetBookStatus(id));
+
+
 
 }

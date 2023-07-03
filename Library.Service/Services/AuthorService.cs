@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
-using Library.Models;
 using Library.Models.Exceptions;
 using Library.Models.Models.Authors;
 using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Library.Service.Services;
 
@@ -31,19 +29,15 @@ public class AuthorService : IAuthorService
 
     public async Task<AuthorResponse> CreateAuthor(CreateAuthorRequest createAuthorRequest)
     {
-       var author = new Author()
-       {
-           Id = Guid.NewGuid(),
-           BirthDate = createAuthorRequest.BirthDate,
-           Firstname = createAuthorRequest.Firstname,
-           LastName = createAuthorRequest.LastName,
-           IsDeleted = false,
-       };
-
-
+        var author = new Author()
+        {
+            Id = Guid.NewGuid(),
+            BirthDate = createAuthorRequest.BirthDate,
+            Firstname = createAuthorRequest.Firstname,
+            LastName = createAuthorRequest.LastName,
+            IsDeleted = false,
+        };
         await _authorRepository.AddAsync(author);
-
-
         return _mapper.Map<AuthorResponse>(author);
     }
     public async Task<AuthorResponse> UpdateAuthor(EditAuthorRequest editAuthorRequest)
@@ -51,17 +45,15 @@ public class AuthorService : IAuthorService
         var author = await _authorRepository.GetByIdAsync(editAuthorRequest.AuthorID);
         ValidationHelper.AuthorValidation(author);
 
-
         author.Id = editAuthorRequest.AuthorID;
-            author.BirthDate = editAuthorRequest.BirthDate;
-            author.Firstname = editAuthorRequest.Firstname;
-            author.LastName = editAuthorRequest.LastName;
-            author.IsDeleted = editAuthorRequest.IsDeleted;
-       
+        author.BirthDate = editAuthorRequest.BirthDate;
+        author.Firstname = editAuthorRequest.Firstname;
+        author.LastName = editAuthorRequest.LastName;
+        author.IsDeleted = editAuthorRequest.IsDeleted;
 
         await _authorRepository.UpdateAsync(author);
-
-        return _mapper.Map<AuthorResponse>(author);     }
+        return _mapper.Map<AuthorResponse>(author);
+    }
 
     public async Task<bool> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
     {

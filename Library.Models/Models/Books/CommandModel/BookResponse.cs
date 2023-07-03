@@ -1,8 +1,12 @@
 ﻿namespace Library.Models.Models.Books.CommandModel;
 
-public class GetBookResponse
+public class BookResponse
 {
-    public Guid BookID { get; set; }
+    public BookResponse()
+    {
+        
+    }
+    public Guid Id { get; set; }
     public string Title { get; set; }
     public string? Image { get; set; }
     public int? Rating { get; set; }
