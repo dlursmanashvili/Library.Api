@@ -6,5 +6,4 @@ public class EditBookAuthorRequest
     public Guid BookID { get; set; }
     public Guid AuthorID { get; set; }
     public bool IsDeleted { get; set; }
-    public string AdminMail { get; set; }
 }

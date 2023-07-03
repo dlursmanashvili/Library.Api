@@ -28,7 +28,6 @@ public class ExceptionMiddleware
         catch (Exception ex)
         {
             await HandleExceptionAsync(context, ex);
-
         }
     }
 

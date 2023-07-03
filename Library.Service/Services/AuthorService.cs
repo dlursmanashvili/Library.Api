@@ -69,21 +69,13 @@ public class AuthorService : IAuthorService
 
     public async Task<AuthorResponse?> GetAuthorById(Guid id)
     {
-        var author = await _authorRepository.GetByIdAsync(id);
-
-        if (author != null)
+        var author = await _authorRepository.GetByIdAsync(id) ?? throw new Exception("author not found");
+        return new AuthorResponse()
         {
-            return new AuthorResponse()
-            {
-                Firstname = author.Firstname,
-                LastName = author.LastName,
-                Id = author.Id
-            };
-        }
-        else
-        {
-            throw new Exception("author not found");
-        }
+            Firstname = author.Firstname,
+            LastName = author.LastName,
+            Id = author.Id
+        };
     }
 
     public async Task<IEnumerable<AuthorResponse>?> GetAllAuthors()

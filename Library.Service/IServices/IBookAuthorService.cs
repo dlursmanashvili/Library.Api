@@ -6,9 +6,9 @@ namespace Library.Service.IServices;
 
 public interface IBookAuthorService
 {
-    Task<CoommandResult> CreateBookAuthor(CreateBookAuthorRequest createBookAuthorRequest);
-    Task<CoommandResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest);
-    Task<CoommandResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest);
-    Task<GetBookAuthorResponse> GetBookAuthorById(Guid idBookAutrhorID);
-    Task<IEnumerable<GetBookAuthorResponse>?> GetAllBookAuthor();
+    Task<BookAuthorResponse> CreateBookAuthor(CreateBookAuthorRequest createBookAuthorRequest);
+    Task<BookAuthorResponse> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest);
+    Task<bool> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest);
+    Task<BookAuthorResponse> GetBookAuthorById(Guid idBookAutrhorID);
+    Task<IEnumerable<BookAuthorResponse>?> GetAllBookAuthor();
 }

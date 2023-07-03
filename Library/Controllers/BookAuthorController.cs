@@ -1,6 +1,7 @@
-﻿using Library.Infrastructure.Repositories.Interfaces;
+﻿using Library.Models.Models.Authors.CommandModel;
 using Library.Models.Models.BookAuthors.CommandModel;
 using Library.Service.IServices;
+using Library.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,34 +13,60 @@ namespace Library.Api.Controllers;
 public class BookAuthorController : ControllerBase
 {
     private readonly IBookAuthorService _bookAuthorService;
-   
+
     public BookAuthorController(IBookAuthorService bookAuthorService)
     {
         _bookAuthorService = bookAuthorService;
-       
+
     }
+    /// <summary>
+    /// Creates BookAuthor.
+    /// </summary>
+    /// <param name="createAuthorRequest"></param>
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> CreateBookAuthor(CreateBookAuthorRequest createBookAuthorRequest)
-         => Ok(await _bookAuthorService.CreateBookAuthor(createBookAuthorRequest));
-    
+    [ProducesResponseType(typeof(BookAuthorResponse), 201)]
+    public async Task<IActionResult> Create(CreateBookAuthorRequest createBookAuthorRequest)
+    {       
+        var result = await _bookAuthorService.CreateBookAuthor(createBookAuthorRequest);
+        return CreatedAtAction("GetAll", result);
+    }/// <summary>
+     /// Updates info about BookAuthor
+     /// </summary>
+     /// <param name="editBookAuthorRequest"></param>
+    [Authorize]
+    [HttpPut]
+    [ProducesResponseType(typeof(BookAuthorResponse), 200)]
+    public async Task<IActionResult> Update(EditBookAuthorRequest editBookAuthorRequest)
+       => Ok(await _bookAuthorService.UpdateBookAuthor(editBookAuthorRequest));
+
+    /// <summary>
+    /// Gets current BookAuthor by given Id.
+    /// </summary>
+    /// <param name="id"></param>
     [Authorize]
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetBookAuthorById(Guid id)
+    [ProducesResponseType(typeof(BookAuthorResponse), 200)]
+    public async Task<IActionResult> GetById(Guid id)
         => Ok(await _bookAuthorService.GetBookAuthorById(id));
 
+    /// <summary>
+    /// Gets list of authors BookAuthor
+    /// </summary>
     [Authorize]
     [HttpGet]
+    [ProducesResponseType(typeof(BookAuthorResponse), 200)]
     public async Task<IActionResult> GetAllBookAuthors()
         => Ok(await _bookAuthorService.GetAllBookAuthor());
 
-    [Authorize]
-    [HttpPut]
-    public async Task<IActionResult> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest)
-        => Ok(await _bookAuthorService.UpdateBookAuthor(editBookAuthorRequest));
-
+    /// <summary>
+    /// Deletes BookAuthor.
+    /// </summary>
+    /// <param name="deleteBookAuthorRequest"></param>
+    /// <returns></returns>
     [Authorize]
     [HttpDelete]
+    [ProducesResponseType(204)]
     public async Task<IActionResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
         => Ok(await _bookAuthorService.DeleteBookAuthor(deleteBookAuthorRequest));
 }
