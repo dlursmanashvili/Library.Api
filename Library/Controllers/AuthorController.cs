@@ -30,7 +30,6 @@ namespace Library.Api.Controllers
         }
 
         /// <summary>        /// Updates info about author.
-
         /// </summary>
         /// <param name="editAuthorRequest"></param>
         [Authorize]

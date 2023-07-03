@@ -68,5 +68,8 @@ public class BookAuthorController : ControllerBase
     [HttpDelete]
     [ProducesResponseType(204)]
     public async Task<IActionResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
-        => Ok(await _bookAuthorService.DeleteBookAuthor(deleteBookAuthorRequest));
+    {
+        await _bookAuthorService.DeleteBookAuthor(deleteBookAuthorRequest);
+        return NoContent();
+    }
 }
