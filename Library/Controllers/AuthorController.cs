@@ -29,8 +29,8 @@ namespace Library.Api.Controllers
             return CreatedAtAction("GetAll", result);
         }
 
-        /// <summary>
-        /// Updates info about author.
+        /// <summary>        /// Updates info about author.
+
         /// </summary>
         /// <param name="editAuthorRequest"></param>
         [Authorize]
