@@ -8,7 +8,7 @@ namespace Library.Api;
 
 public static class DI
 {
-    public static void DependecyResolver(IServiceCollection services)
+    public static void DependecyResolver(this IServiceCollection services)
     {
         services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IBookService, BookService>();

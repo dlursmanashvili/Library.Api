@@ -1,10 +1,12 @@
-﻿using Library.Infrastructure.HelperClass;
+﻿using AutoMapper;
+using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
 using Library.Models;
 using Library.Models.Exceptions;
 using Library.Models.Models.Authors;
 using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Library.Service.Services;
 
@@ -14,89 +16,76 @@ public class AuthorService : IAuthorService
 
     private readonly IEmployeeService _employeeService;
     private readonly IBookAuthorRepository _bookAuthorRepository;
-    public AuthorService(IAuthorRepository authorRepository, IEmployeeService employeeService, IBookAuthorRepository bookAuthorRepository)
+    private readonly IMapper _mapper;
+    public AuthorService(
+        IAuthorRepository authorRepository,
+        IEmployeeService employeeService,
+        IBookAuthorRepository bookAuthorRepository,
+        IMapper mapper)
     {
         _authorRepository = authorRepository;
         _employeeService = employeeService;
         _bookAuthorRepository = bookAuthorRepository;
+        _mapper = mapper;
     }
 
-    public async Task<CoommandResult> CreateAuthor(CreateAuthorRequest createAuthorRequest)
+    public async Task<AuthorResponse> CreateAuthor(CreateAuthorRequest createAuthorRequest)
     {
+       var author = new Author()
+       {
+           Id = Guid.NewGuid(),
+           BirthDate = createAuthorRequest.BirthDate,
+           Firstname = createAuthorRequest.Firstname,
+           LastName = createAuthorRequest.LastName,
+           IsDeleted = false,
+       };
 
-        ValidationHelper.GetNullParameterName(createAuthorRequest);
 
-        var user = await _employeeService.GetEmployeeByEmail(createAuthorRequest.AdminEmail);
-        if (user == null)
-            throw new NotFoundException(" user not found");
-        ValidationHelper.UserValidation(user, createAuthorRequest.AdminEmail, true);
+        await _authorRepository.AddAsync(author);
 
-        await _authorRepository.AddAsync(new Author()
-        {
-            Id = new Guid(),
-            BirthDate = createAuthorRequest.BirthDate,
-            Firstname = createAuthorRequest.Firstname,
-            LastName = createAuthorRequest.LastName,
-            IsDeleted = false,
-        });
-        return new CoommandResult();
+
+        return _mapper.Map<AuthorResponse>(author);
     }
-    public async Task<CoommandResult> UpdateAuthor(EditAuthorRequest editAuthorRequest)
+    public async Task<AuthorResponse> UpdateAuthor(EditAuthorRequest editAuthorRequest)
     {
-        var user = await _employeeService.GetEmployeeByEmail(editAuthorRequest.AdminEmail);
-        if (user == null)
-            throw new NotFoundException(" user not found");
-        ValidationHelper.UserValidation(user, editAuthorRequest.AdminEmail, true);
-
         var author = await _authorRepository.GetByIdAsync(editAuthorRequest.AuthorID);
         ValidationHelper.AuthorValidation(author);
 
-        await _authorRepository.UpdateAsync(new Author()
-        {
-            Id = editAuthorRequest.AuthorID,
-            BirthDate = editAuthorRequest.BirthDate,
-            Firstname = editAuthorRequest.Firstname,
-            LastName = editAuthorRequest.LastName,
-            IsDeleted = editAuthorRequest.IsDeleted,
-            //BookAuthors = author.BookAuthors,
-        });
-        return new CoommandResult();
-    }
 
-    public async Task<CoommandResult> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
+        author.Id = editAuthorRequest.AuthorID;
+            author.BirthDate = editAuthorRequest.BirthDate;
+            author.Firstname = editAuthorRequest.Firstname;
+            author.LastName = editAuthorRequest.LastName;
+            author.IsDeleted = editAuthorRequest.IsDeleted;
+       
+
+        await _authorRepository.UpdateAsync(author);
+
+        return _mapper.Map<AuthorResponse>(author);     }
+
+    public async Task<bool> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
     {
-        var user = await _employeeService.GetEmployeeByEmail(deleteAuthorRequest.AdminEmail);
-        if (user == null)
-            throw new NotFoundException(" user not found");
-        ValidationHelper.UserValidation(user, deleteAuthorRequest.AdminEmail, true);
-
         var author = await _authorRepository.GetByIdAsync(deleteAuthorRequest.Authorid);
         ValidationHelper.AuthorValidation(author);
         var bookauthor = await _bookAuthorRepository.LoadAsync();
         if (bookauthor.Any(x => x.Id == deleteAuthorRequest.Authorid && x.IsDeleted == false))
-        {
-            return new CoommandResult
-            {
-                IsSuccess = false,
-                SuccessMassage = $"Please Delete all book for  {author.Firstname} {author.LastName} author"
-            };
-        }
+            throw new BadRequestException($"Please Delete all books for  {author.Firstname} {author.LastName} author");
 
         await _authorRepository.RemoveAsync(author);
-        return new CoommandResult { IsSuccess = true };
+        return true;
     }
 
-    public async Task<GetAuthorResponse?> GetAuthorById(Guid id)
+    public async Task<AuthorResponse?> GetAuthorById(Guid id)
     {
         var author = await _authorRepository.GetByIdAsync(id);
 
         if (author != null)
         {
-            return new GetAuthorResponse()
+            return new AuthorResponse()
             {
                 Firstname = author.Firstname,
                 LastName = author.LastName,
-                id = author.Id
+                Id = author.Id
             };
         }
         else
@@ -105,17 +94,17 @@ public class AuthorService : IAuthorService
         }
     }
 
-    public async Task<IEnumerable<GetAuthorResponse>?> GetAllAuthors()
+    public async Task<IEnumerable<AuthorResponse>?> GetAllAuthors()
     {
         var result = await _authorRepository.LoadAsync();
 
         if (result.Any())
         {
-            return result.Select(x => new GetAuthorResponse()
+            return result.Select(x => new AuthorResponse()
             {
                 Firstname = x.Firstname,
                 LastName = x.LastName,
-                id = x.Id
+                Id = x.Id
             });
         }
         return null;

@@ -127,21 +127,9 @@ public class BookService : IBookService
         var result = new CoommandResult();
         var book = await _bookRepository.GetByIdAsync(getBookStatusResponse);
         if (book == null)
-        {
-            result = new CoommandResult()
-            {
-                IsSuccess = false,
-                SuccessMassage = $"Book  bot found"
-            };
-        }
-        if (book.IsDeleted)
-        {
-            result = new CoommandResult()
-            {
-                IsSuccess = false,
-                SuccessMassage = $"Book IsDeleted"
-            };
-        }
+            throw new NotFoundException("Book  not found");
+
+
         if (book.InLibrary == true)
             result = new CoommandResult()
             {

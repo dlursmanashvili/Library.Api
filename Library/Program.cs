@@ -1,9 +1,11 @@
 ﻿using Library.Api;
 using Library.Api.Middlewares;
 using Library.Infrastructure.DataBaseHelper;
+using Library.Service.Profiles;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http.Headers;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -17,14 +19,22 @@ DI.DependecyResolver(builder.Services);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
 
 // add cors
 builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => builder.AllowAnyOrigin()
                                                                               .AllowAnyMethod()
                                                                               .AllowAnyHeader()));
 
- builder.Services.AddAuthentication("cookie")
+//add autoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie")
     .AddOAuth("github", options =>
     {

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Library.Models.Models.BookAuthors;
 
 namespace Library.Models.Models.Authors;
@@ -12,6 +13,7 @@ public class Author : BaseEntity<Guid>
 
     public DateTime BirthDate { get; set; }
 
+    [NotMapped]
     public List<BookAuthor> BookAuthors { get; set; }
 
 }

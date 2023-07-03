@@ -6,9 +6,15 @@ namespace Library.Service.IServices;
 
 public interface IAuthorService
 {
-    Task<CoommandResult> CreateAuthor(CreateAuthorRequest createAuthorRequest);
-    Task<CoommandResult> UpdateAuthor(EditAuthorRequest editAuthorRequest);
-    Task<CoommandResult> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest);
-    Task<IEnumerable<GetAuthorResponse>?> GetAllAuthors();
-    Task<GetAuthorResponse?> GetAuthorById(Guid id);
+    /// <summary>
+    /// Add new author. 
+    /// </summary>
+    /// <param name="createAuthorRequest"></param>
+    /// <returns><see cref="AuthorResponse/></returns>
+    Task<AuthorResponse> CreateAuthor(CreateAuthorRequest createAuthorRequest);
+
+    Task<AuthorResponse> UpdateAuthor(EditAuthorRequest editAuthorRequest);
+    Task<bool> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest);
+    Task<IEnumerable<AuthorResponse>?> GetAllAuthors();
+    Task<AuthorResponse?> GetAuthorById(Guid id);
 }

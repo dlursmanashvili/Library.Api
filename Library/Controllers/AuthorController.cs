@@ -1,4 +1,4 @@
-﻿using Library.Infrastructure.Repositories.Interfaces;
+﻿using Library.Models;
 using Library.Models.Models.Authors.CommandModel;
 using Library.Service.IServices;
 using Microsoft.AspNetCore.Authorization;
@@ -11,33 +11,70 @@ namespace Library.Api.Controllers
     public class AuthorController : ControllerBase
     {
         private readonly IAuthorService _authorService;
-       
+
         public AuthorController(IAuthorService authorService)
         {
-            _authorService = authorService;          
+            _authorService = authorService;
         }
+
+        /// <summary>
+        /// Creates Author of the book.
+        /// </summary>
+        /// <param name="createAuthorRequest"></param>
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateAuthor(CreateAuthorRequest createAuthorRequest)
-           => Ok(await _authorService.CreateAuthor(createAuthorRequest));
+        [ProducesResponseType(typeof(AuthorResponse), 201)]
+        public async Task<IActionResult> Create(CreateAuthorRequest createAuthorRequest)
+        {
+            var result = await _authorService.CreateAuthor(createAuthorRequest);
+            return CreatedAtAction("GetAll", result);
+        }
+
+        /// <summary>
+        /// Updates info about author.
+        /// </summary>
+        /// <param name="editAuthorRequest"></param>
         [Authorize]
         [HttpPut]
-        public async Task<IActionResult> UpdateAuthor(EditAuthorRequest editAuthorRequest)
+        [ProducesResponseType(typeof(AuthorResponse), 200)]
+        public async Task<IActionResult> Update(EditAuthorRequest editAuthorRequest)
             => Ok(await _authorService.UpdateAuthor(editAuthorRequest));
+
+
+        /// <summary>
+        /// Gets current author by given Id.
+        /// </summary>
+        /// <param name="id"></param>
         [Authorize]
         [HttpGet]
         [Route("GetAuthorById/{id}")]
-        public async Task<IActionResult> GetAuthorById(Guid id)
+        [ProducesResponseType(typeof(AuthorResponse), 200)]
+        public async Task<IActionResult> GetById(Guid id)
           => Ok(await _authorService.GetAuthorById(id));
+
+        /// <summary>
+        /// Gets list of authors.
+        /// </summary>
         [Authorize]
         [HttpGet]
         [Route("GetAllAuthors")]
-        public async Task<IActionResult> GetAllAuthors()
+        [ProducesResponseType(typeof(AuthorResponse), 200)]
+        public async Task<IActionResult> GetAll()
             => Ok(await _authorService.GetAllAuthors());
+
+        /// <summary>
+        /// Deletes author.
+        /// </summary>
+        /// <param name="deleteAuthorRequest"></param>
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
-          => Ok(await _authorService.DeleteAuthor(deleteAuthorRequest));
+        [ProducesResponseType(204)]
+        public async Task<IActionResult> Delete(DeleteAuthorRequest deleteAuthorRequest)
+        {
+            await _authorService.DeleteAuthor(deleteAuthorRequest);
+            return NoContent();
+
+        }
 
     }
 }
