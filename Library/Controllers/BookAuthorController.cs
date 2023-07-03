@@ -1,7 +1,5 @@
-﻿using Library.Models.Models.Authors.CommandModel;
-using Library.Models.Models.BookAuthors.CommandModel;
+﻿using Library.Models.Models.BookAuthors.CommandModel;
 using Library.Service.IServices;
-using Library.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -27,13 +25,15 @@ public class BookAuthorController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(BookAuthorResponse), 201)]
     public async Task<IActionResult> Create(CreateBookAuthorRequest createBookAuthorRequest)
-    {       
+    {
         var result = await _bookAuthorService.CreateBookAuthor(createBookAuthorRequest);
         return CreatedAtAction("GetAll", result);
-    }/// <summary>
-     /// Updates info about BookAuthor
-     /// </summary>
-     /// <param name="editBookAuthorRequest"></param>
+    }
+
+    /// <summary>
+    /// Updates info about BookAuthor
+    /// </summary>
+    /// <param name="editBookAuthorRequest"></param>
     [Authorize]
     [HttpPut]
     [ProducesResponseType(typeof(BookAuthorResponse), 200)]
