@@ -1,8 +1,6 @@
-﻿using Library.Infrastructure.HelperClass;
-using Library.Models.Models.Authors;
+﻿using Library.Models.Models.Authors;
 using Library.Models.Models.BookAuthors;
 using Library.Models.Models.Books;
-using Library.Models.Models.Employee;
 using Microsoft.EntityFrameworkCore;
 
 namespace Library.Infrastructure.DataBaseHelper;
@@ -27,18 +25,6 @@ public class ApplicationDbContext : DbContext
 
         modelBuilder.Entity<BookAuthor>().HasKey(sc => new { sc.BookId, sc.AuthorId });
 
-        SecurityHelper.CreatePasswordHash("123", out byte[] passwordHash, out byte[] passwordSalt);
-
-        modelBuilder.Entity<Employee>().HasData(
-              new Employee
-              {
-                  Email = "SuperAdmin@gmail.com",
-                  Id = new Guid("a1bf7271-6d45-4475-ad1f-5de6cc172dea"),
-                  PasswordHash = passwordHash,
-                  PasswordSalt = passwordSalt,
-                  IsAdministrator = true,
-                  IsDeleted = false,
-              });
 
         base.OnModelCreating(modelBuilder);
     }
@@ -46,5 +32,4 @@ public class ApplicationDbContext : DbContext
     public DbSet<Book> Books { get; set; }
     public DbSet<Author> Authors { get; set; }
     public DbSet<BookAuthor> BookAuthors { get; set; }
-    public DbSet<Employee> Employees { get; set; }
 }

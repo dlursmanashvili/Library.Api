@@ -13,13 +13,10 @@ public static class DI
         services.AddScoped<IAuthorService, AuthorService>();
         services.AddScoped<IBookService, BookService>();
         services.AddScoped<IBookAuthorService, BookAuthorService>();
-        services.AddScoped<IEmployeeService, EmployeeService>();
-        services.AddScoped<IAuthentification, Authentification>();
         services.AddScoped<IFileService, FileService>();
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<IBookRepository, BookRepository>();
-        services.AddScoped<IEmployeeRepository, EmployeeRepository>();
         services.AddScoped<IBookAuthorRepository, BookAuthorRepository>();
     }
 }

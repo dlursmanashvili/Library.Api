@@ -11,18 +11,14 @@ namespace Library.Service.Services;
 public class AuthorService : IAuthorService
 {
     private readonly IAuthorRepository _authorRepository;
-
-    private readonly IEmployeeService _employeeService;
     private readonly IBookAuthorRepository _bookAuthorRepository;
     private readonly IMapper _mapper;
     public AuthorService(
         IAuthorRepository authorRepository,
-        IEmployeeService employeeService,
         IBookAuthorRepository bookAuthorRepository,
         IMapper mapper)
     {
         _authorRepository = authorRepository;
-        _employeeService = employeeService;
         _bookAuthorRepository = bookAuthorRepository;
         _mapper = mapper;
     }
