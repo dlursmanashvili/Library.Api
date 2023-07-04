@@ -56,7 +56,7 @@ public class BookAuthorController : ControllerBase
     [Authorize]
     [HttpGet]
     [ProducesResponseType(typeof(BookAuthorResponse), 200)]
-    public async Task<IActionResult> GetAllBookAuthors()
+    public async Task<IActionResult> GetAll()
         => Ok(await _bookAuthorService.GetAllBookAuthor());
 
     /// <summary>
@@ -67,7 +67,7 @@ public class BookAuthorController : ControllerBase
     [Authorize]
     [HttpDelete]
     [ProducesResponseType(204)]
-    public async Task<IActionResult> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
+    public async Task<IActionResult> Delete(DeleteBookAuthorRequest deleteBookAuthorRequest)
     {
         await _bookAuthorService.DeleteBookAuthor(deleteBookAuthorRequest);
         return NoContent();
