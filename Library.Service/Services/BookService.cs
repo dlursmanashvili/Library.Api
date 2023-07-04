@@ -67,26 +67,15 @@ public class BookService : IBookService
         await _bookRepository.RemoveAsync(book);
         return true;
     }
-    public async Task<BookResponse?> GetBookById(Guid id)
+    public async Task<GetBookByIdResponse?> GetBookById(Guid id)
     {
-        var result = await _bookRepository.GetByIdAsync(id);
-        if (result != null)
-        {
-            return new BookResponse()
-            {
-                Rating = result.Rating,
-                Description = result.Description,
-                InLibrary = result.InLibrary,
-                FilePath = result.FilePath,
-                PublicationDate = result.PublicationDate,
-                Title = result.Title,
-                Image = result.Image,
-            };
+        var result = await _bookRepository.GetBookById(id);
+        if(result == null)    
+            throw new BadRequestException("Bad request"); 
 
-        }
-        else { throw new Exception("Book not found"); }
+        return result;
     }
-    public async Task<IEnumerable<BookResponse>> GetAllBooks()
+    public async Task<IEnumerable<GetAllBooksResponse>> GetAllBooks()
     {
         var result = await _bookRepository.LoadAsync();
 
@@ -98,19 +87,13 @@ public class BookService : IBookService
         if (result.Any())
         {
             return result.Select(x =>
-            new BookResponse
+            new GetAllBooksResponse()
             {
                 Id = x.Id,
-                Title = x.Title,
-                Description = x.Description,
-                InLibrary = x.InLibrary,
-                FilePath = x.FilePath,
-                PublicationDate = x.PublicationDate,
-                Rating = x.Rating,
-                Image = x.Image,
+                Title = x.Title
             }).ToList();
         }
-        return new List<BookResponse>();
+        return new List<GetAllBooksResponse>();
     }
 
     public async Task<CoommandResult> GetBookStatus(Guid getBookStatusResponse)

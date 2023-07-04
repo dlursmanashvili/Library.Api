@@ -4,4 +4,5 @@ namespace Library.Infrastructure.Repositories.Interfaces;
 
 public interface IBookAuthorRepository : IRepositoryBase<BookAuthor>
 {
+     
 }

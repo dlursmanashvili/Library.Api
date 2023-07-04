@@ -86,15 +86,15 @@ using (var scope = app.Services.CreateScope())
     dataContext.Database.Migrate();
 }
 
-// ეს პირველი get - მეთოდი აუცილებელი არაა, უბრალოდ იმიტომ დავწერე რომ სადმე გადავემისამართებინე და ქლეიმები გამოეტანა.
-var x= app.MapGet("/auth/homepage", (HttpContext ctx) =>
-{
-    ctx.GetTokenAsync("access_token");
-    return ctx.User.Claims.Select(x => new { x.Type, x.Value }).ToList();
-});
+//// ეს პირველი get - მეთოდი აუცილებელი არაა, უბრალოდ იმიტომ დავწერე რომ სადმე გადავემისამართებინე და ქლეიმები გამოეტანა.
+//var x= app.MapGet("/auth/homepage", (HttpContext ctx) =>
+//{
+//    ctx.GetTokenAsync("access_token");
+//    return ctx.User.Claims.Select(x => new { x.Type, x.Value }).ToList();
+//});
 
-//ამ ენდფოინთზე ("/auth/login") კონტროლერი არ კეთდება(ვცადე მარა არ გამოვიდა), რადგან IActionResult-ს არ აბრუნებს, ამიტომ Minimal Api-ით კეთდება, ასე რომ პირდაპირ აქ დაამპლემენტირე.
-// აუცილებლად app.UseAuthentication(); ქვემოთ.
+////ამ ენდფოინთზე ("/auth/login") კონტროლერი არ კეთდება(ვცადე მარა არ გამოვიდა), რადგან IActionResult-ს არ აბრუნებს, ამიტომ Minimal Api-ით კეთდება, ასე რომ პირდაპირ აქ დაამპლემენტირე.
+//// აუცილებლად app.UseAuthentication(); ქვემოთ.
 
 
 var y=  app.MapGet("/auth/login", () =>
@@ -102,7 +102,7 @@ var y=  app.MapGet("/auth/login", () =>
     return Results.Challenge(
     new AuthenticationProperties()
     {
-        RedirectUri = "https://localhost:7199/auth/homepage"  // აქ შეგიძლია მიუთითო ნებისმიერი url- სადაც გინდა რომ გადამისამართდეს
+        RedirectUri = "https://localhost:7199/api/Book"  
     },
     authenticationSchemes: new List<string>() { "github" });
 
@@ -123,7 +123,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-//  აპლიკაციას  რომ გაუშვებ, ჩაწერე url-ში https://localhost:7199/auth/login და სასწაული მოხდება
+//  აპლიკაციას  რომ გაუშვებ, ჩაწერე url-ში https://localhost:7199/auth/login 
 
 ///////////// github user info 
 //Pass:aaaQQQ123!@#

@@ -5,6 +5,7 @@ using Library.Models.Exceptions;
 using Library.Models.Models.BookAuthors;
 using Library.Models.Models.BookAuthors.CommandModel;
 using Library.Service.IServices;
+using System.Linq;
 
 namespace Library.Service.Services;
 
@@ -27,52 +28,45 @@ public class BookAuthorService : IBookAuthorService
         _mapper = mapper;
     }
 
-    public async Task<BookAuthorResponse> CreateBookAuthor(CreateBookAuthorRequest bookAuthor)
+    public async Task<BookAuthorResponse> CreateBookAuthor(CreateBookAuthorRequest request)
     {
-        var book = await _bookRepository.GetByIdAsync(bookAuthor.BookId) ?? throw new Exception("Book not found");
-        var author = await _authorRepository.GetByIdAsync(bookAuthor.AuthorId) ?? throw new Exception("Author not found");
         var bookAuthors = new BookAuthor()
         {
             Id = Guid.NewGuid(),
-            BookId = book.Id,
-            AuthorId = author.Id,
+            BookId = request.BookId,
+            AuthorId = request.AuthorId,
         };
+
         await _bookAuthorRepository.AddAsync(bookAuthors);
         return _mapper.Map<BookAuthorResponse>(bookAuthors);
     }
 
-    public async Task<BookAuthorResponse> UpdateBookAuthor(EditBookAuthorRequest editBookAuthorRequest)
+    public async Task<BookAuthorResponse> UpdateBookAuthor(EditBookAuthorRequest request)
     {
-        var result = _bookAuthorRepository.GetByIdAsync(editBookAuthorRequest.bookAuthorID) ?? throw new Exception("bookAuthor not found");
-
-        var author = await _authorRepository.GetByIdAsync(editBookAuthorRequest.AuthorID);
-        if (author == null || author.IsDeleted == true) throw new Exception("Author not found or Author is deleted");
-
-        var book = await _bookRepository.GetByIdAsync(editBookAuthorRequest.BookID);
-        if (book == null || book.IsDeleted == true) throw new Exception("Book not found or Book is deleted");
-
-        var bookAuthors = new BookAuthor()
-        {
-            Id = editBookAuthorRequest.bookAuthorID,
-            AuthorId = editBookAuthorRequest.AuthorID,
-            BookId = editBookAuthorRequest.BookID,
-            IsDeleted = editBookAuthorRequest.IsDeleted
+        
+        var newBook = new BookAuthor() 
+        { 
+            Id= request.Id,
+            BookId = request.BookID,
+            AuthorId = request.AuthorID,
+            IsDeleted = request.IsDeleted
         };
-        await _bookAuthorRepository.UpdateAsync(bookAuthors);
-        return _mapper.Map<BookAuthorResponse>(bookAuthors);
+
+        await _bookAuthorRepository.UpdateAsync(newBook);
+        return _mapper.Map<BookAuthorResponse>(newBook);
     }
 
-    public async Task<bool> DeleteBookAuthor(DeleteBookAuthorRequest deleteBookAuthorRequest)
+    public async Task<bool> DeleteBookAuthor(DeleteBookAuthorRequest request)
     {
-        var book = await _bookRepository.GetByIdAsync(deleteBookAuthorRequest.BookId);
+        var book = await _bookRepository.GetByIdAsync(request.BookId);
         if (book != null)
             throw new Exception($"please remove the book {book.Title}");
 
-        var author = await _authorRepository.GetByIdAsync(deleteBookAuthorRequest.AuthorId);
+        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
         if (author != null)
             throw new Exception($"please remove author {author.Firstname} {author.LastName}");
 
-        var result = await _bookAuthorRepository.GetByIdAsync(deleteBookAuthorRequest.bookAuthorID);
+        var result = await _bookAuthorRepository.GetByIdAsync(request.bookAuthorID);
         if (result == null)
             throw new Exception("bookAuthor not found");
 
@@ -80,9 +74,9 @@ public class BookAuthorService : IBookAuthorService
         return true;
     }
 
-    public async Task<BookAuthorResponse?> GetBookAuthorById(Guid BookAutrhorID)
+    public async Task<BookAuthorResponse?> GetBookAuthorById(Guid Id)
     {
-        var result = await _bookAuthorRepository.GetByIdAsync(BookAutrhorID) ?? throw new NotFoundException("Result Not Faund");       
+        var result = await _bookAuthorRepository.GetByIdAsync(Id) ?? throw new NotFoundException("Result Not Faund");
         return new BookAuthorResponse()
         {
             Id = result.Id,

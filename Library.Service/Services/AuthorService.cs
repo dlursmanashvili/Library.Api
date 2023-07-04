@@ -41,7 +41,6 @@ public class AuthorService : IAuthorService
         var author = await _authorRepository.GetByIdAsync(editAuthorRequest.AuthorID);
         ValidationHelper.AuthorValidation(author);
 
-        author.Id = editAuthorRequest.AuthorID;
         author.BirthDate = editAuthorRequest.BirthDate;
         author.Firstname = editAuthorRequest.Firstname;
         author.LastName = editAuthorRequest.LastName;

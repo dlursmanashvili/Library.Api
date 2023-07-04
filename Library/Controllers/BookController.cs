@@ -40,13 +40,12 @@ public class BookController : ControllerBase
       => Ok(await _bookService.UpdateBook(updateBookRequest));
 
     /// <summary>
-    /// Gets current Book by given Id.
+    /// Gets current book by given Id.
     /// </summary>
     /// <param name="id"></param>
     [Authorize]
-    [HttpGet]
-    [Route("GetBookById/{id}")]
-    [ProducesResponseType(typeof(BookResponse), 200)]
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(GetBookByIdResponse), 200)]
     public async Task<IActionResult> GetById(Guid id)
     => Ok(await _bookService.GetBookById(id));
 
@@ -55,8 +54,7 @@ public class BookController : ControllerBase
     /// </summary>
     [Authorize]
     [HttpGet]
-    [Route("GetAll")]
-    [ProducesResponseType(typeof(BookResponse), 200)]
+    [ProducesResponseType(typeof(GetAllBooksResponse), 200)]
     public async Task<IActionResult> GetAll()
         => Ok(await _bookService.GetAllBooks());
 
@@ -79,7 +77,7 @@ public class BookController : ControllerBase
     /// <param name="updateBookStatusRequest"></param>
     [Authorize]
     [HttpPut]
-    [Route("EditStatus")]
+    [Route("Status")]
     public async Task<IActionResult> EditStatus(UpdateBookStatusRequest updateBookStatusRequest)
   => Ok(await _bookService.EditBookStatus(updateBookStatusRequest));
 
@@ -89,7 +87,7 @@ public class BookController : ControllerBase
     /// <param name="id"></param>
     [Authorize]
     [HttpGet]
-    [Route("GetStatus/{id}")]
+    [Route("Status/{id}")]
     public async Task<IActionResult> GetStatus(Guid id)
     => Ok(await _bookService.GetBookStatus(id));
 

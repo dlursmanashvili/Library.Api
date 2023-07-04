@@ -5,8 +5,8 @@ namespace Library.Service.IServices;
 
 public interface IBookService
 {
-    Task<BookResponse> GetBookById(Guid id);
-    Task<IEnumerable<BookResponse>> GetAllBooks();
+    Task<GetBookByIdResponse> GetBookById(Guid id);
+    Task<IEnumerable<GetAllBooksResponse>> GetAllBooks();
     Task<BookResponse> CreateBook(CreateBookRequest createBookModel);
     Task<BookResponse> UpdateBook(UpdateBookRequest updateBookRequest);
     Task<bool> DeleteBook(DeleteBookRequest deleteBookRequest);

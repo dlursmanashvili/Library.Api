@@ -2,7 +2,7 @@
 
 public class EditBookAuthorRequest
 {
-    public Guid bookAuthorID { get; set; }
+    public Guid Id { get; set; }
     public Guid BookID { get; set; }
     public Guid AuthorID { get; set; }
     public bool IsDeleted { get; set; }
