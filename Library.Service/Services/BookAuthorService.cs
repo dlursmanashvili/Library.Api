@@ -41,36 +41,32 @@ public class BookAuthorService : IBookAuthorService
         return _mapper.Map<BookAuthorResponse>(bookAuthors);
     }
 
-    public async Task<BookAuthorResponse> UpdateBookAuthor(EditBookAuthorRequest request)
+    public async Task<BookAuthorResponse> UpdateBookAuthor(UpdateBookAuthorRequest request)
     {
-        
-        var newBook = new BookAuthor() 
-        { 
-            Id= request.Id,
-            BookId = request.BookID,
-            AuthorId = request.AuthorID,
-            IsDeleted = request.IsDeleted
-        };
-
-        await _bookAuthorRepository.UpdateAsync(newBook);
-        return _mapper.Map<BookAuthorResponse>(newBook);
+        var result = await _bookAuthorRepository.BookAuthorUpdate(request);
+        return result;  
     }
 
     public async Task<bool> DeleteBookAuthor(DeleteBookAuthorRequest request)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId);
-        if (book != null)
-            throw new Exception($"please remove the book {book.Title}");
-
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
-        if (author != null)
-            throw new Exception($"please remove author {author.Firstname} {author.LastName}");
-
-        var result = await _bookAuthorRepository.GetByIdAsync(request.bookAuthorID);
+        var result = await _bookAuthorRepository.GetByIdAsync(request.Id);
         if (result == null)
             throw new Exception("bookAuthor not found");
 
-        await _bookAuthorRepository.RemoveAsync(result);
+        var book = await _bookRepository.GetByIdAsync(result.BookId);
+        if (book != null)
+            throw new Exception($"please remove book {book.Title} first, before deleting current record");
+
+        var author = await _authorRepository.GetByIdAsync(result.AuthorId);
+        if (author != null)
+            throw new Exception($"please remove author - {author.Firstname} {author.LastName} - first, before deleting current record\"");
+
+        if (result.IsDeleted)
+            throw new NotFoundException("record with this id doesn't exist");
+
+        result.IsDeleted = true;
+
+        await _bookAuthorRepository.UpdateAsync(result);
         return true;
     }
 

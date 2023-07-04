@@ -2,5 +2,5 @@
 
 public class DeleteAuthorRequest
 {
-    public Guid Authorid { get; set; }
+    public Guid Id { get; set; }
 }

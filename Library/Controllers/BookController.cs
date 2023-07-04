@@ -92,5 +92,11 @@ public class BookController : ControllerBase
     => Ok(await _bookService.GetBookStatus(id));
 
 
-
+    /// <summary>
+    /// Search list of Books by Title.
+    /// </summary>
+    [Authorize]
+    [HttpGet("SearchBook/{Title}")]
+    public async Task<IActionResult> Search(string Title)
+        => Ok(await _bookService.SearchBooks( Title));
 }

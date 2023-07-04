@@ -1,5 +1,7 @@
 ﻿using Library.Models.Models.Authors.CommandModel;
+using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
+using Library.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,7 +30,7 @@ namespace Library.Api.Controllers
             var result = await _authorService.CreateAuthor(createAuthorRequest);
             return CreatedAtAction("GetAll", result);
         }
-
+                    
         /// <summary>        /// Updates info about author.
         /// </summary>
         /// <param name="editAuthorRequest"></param>
@@ -73,6 +75,13 @@ namespace Library.Api.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Search list of Books by FirstName.
+        /// </summary>
+        [Authorize]
+        [HttpGet("SearchAuthor/{FirstName}")]
+        public async Task<IActionResult> Search(string FirstName)
+            => Ok(await _authorService.SearchAuthor(FirstName));
     }
 }
 

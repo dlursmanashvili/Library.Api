@@ -61,17 +61,19 @@ public class BookService : IBookService
     {
 
         var book = await _bookRepository.GetByIdAsync(deleteBookRequest.Bookid);
-        if (book == null)
+        if (book == null || book.IsDeleted)
             throw new Exception("book not found");
 
-        await _bookRepository.RemoveAsync(book);
+        book.IsDeleted = true;
+
+        await _bookRepository.UpdateAsync(book);
         return true;
     }
     public async Task<GetBookByIdResponse?> GetBookById(Guid id)
     {
         var result = await _bookRepository.GetBookById(id);
-        if(result == null)    
-            throw new BadRequestException("Bad request"); 
+        if (result == null)
+            throw new BadRequestException("Bad request");
 
         return result;
     }
@@ -161,4 +163,21 @@ public class BookService : IBookService
 
     }
 
+    public async Task<IEnumerable<BookResponse>?> SearchBooks(string Title)
+    {
+        var books = await _bookRepository.LoadAsync() ?? throw new NotFoundException("books not foud");
+
+        var filtedBooks = books.Where(x => x.IsDeleted == false && x.Title == Title)?.ToList() ?? throw new NotFoundException("books not foud");
+
+        return filtedBooks.Select(x => new BookResponse() {
+            Id = x.Id, 
+            Title = x.Title,
+            Description = x.Description,
+            FilePath = x.FilePath,
+            Image = x.Image,
+            InLibrary = x.InLibrary,
+            PublicationDate = x.PublicationDate,
+            Rating = x.Rating
+            });
+    }
 }

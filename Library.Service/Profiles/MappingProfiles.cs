@@ -14,6 +14,7 @@ public class MappingProfiles : Profile
     {
         CreateMap<Author, AuthorResponse>().ReverseMap();
         CreateMap<BookResponse, Book>().ReverseMap();        
-        CreateMap<BookAuthor,BookAuthorResponse>().ReverseMap();        
+        CreateMap<BookAuthor,BookAuthorResponse>().ReverseMap(); 
+        
     }
 }

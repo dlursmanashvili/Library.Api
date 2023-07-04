@@ -12,4 +12,5 @@ public interface IBookService
     Task<bool> DeleteBook(DeleteBookRequest deleteBookRequest);
     Task<CoommandResult> EditBookStatus(UpdateBookStatusRequest updateBookStatusRequest);
     Task<CoommandResult> GetBookStatus(Guid getBookStatusResponse);
+    Task<IEnumerable<BookResponse>?> SearchBooks(string Title);
 }

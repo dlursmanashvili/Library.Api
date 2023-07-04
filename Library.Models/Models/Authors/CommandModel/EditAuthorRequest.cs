@@ -6,5 +6,4 @@ public class EditAuthorRequest
     public string Firstname { get; set; }
     public string LastName { get; set; }
     public DateTime BirthDate { get; set; }
-    public bool IsDeleted { get; set; }
 }

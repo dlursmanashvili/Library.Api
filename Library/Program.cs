@@ -33,16 +33,15 @@ builder.Services.AddCors(options => options.AddPolicy("CorsPolicy", builder => b
 
 //add autoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
-
+// add OAuth
 builder.Services.AddAuthentication("cookie")
     .AddCookie("cookie")
     .AddOAuth("github", options =>
     {
         options.SignInScheme = "cookie";
-
-        // ეს ქვედა ორი თუ გინდა ჯეისონში გაიტანე და იქიდან წამოიღე, უკეთესია. თუ გინდა დატოვე.
-        options.ClientId = "0b8893e097d133fe438c";  //ამას წამოიღებ გითჰაბიდან, კლიენტ აიდის აიღებ მანდედან.
-        options.ClientSecret = "9ca337ef462162f72a88451ff36a26f713bfe7bf"; //სექრეთ ქისაც მანდვე დააგენერირებ.
+        
+        options.ClientId = "0b8893e097d133fe438c"; 
+        options.ClientSecret = "9ca337ef462162f72a88451ff36a26f713bfe7bf";
 
         options.AuthorizationEndpoint = "https://github.com/login/oauth/authorize";
         options.TokenEndpoint = "https://github.com/login/oauth/access_token";
@@ -64,7 +63,6 @@ builder.Services.AddAuthentication("cookie")
         };
     });
 
-//ამას რომ დაწერ, შემდეგ გადადი აპლიკაციაში - properties ფოლდერში, და launchSettings.json გახსენი.
 
 var app = builder.Build();
 
@@ -86,17 +84,8 @@ using (var scope = app.Services.CreateScope())
     dataContext.Database.Migrate();
 }
 
-//// ეს პირველი get - მეთოდი აუცილებელი არაა, უბრალოდ იმიტომ დავწერე რომ სადმე გადავემისამართებინე და ქლეიმები გამოეტანა.
-//var x= app.MapGet("/auth/homepage", (HttpContext ctx) =>
-//{
-//    ctx.GetTokenAsync("access_token");
-//    return ctx.User.Claims.Select(x => new { x.Type, x.Value }).ToList();
-//});
 
-////ამ ენდფოინთზე ("/auth/login") კონტროლერი არ კეთდება(ვცადე მარა არ გამოვიდა), რადგან IActionResult-ს არ აბრუნებს, ამიტომ Minimal Api-ით კეთდება, ასე რომ პირდაპირ აქ დაამპლემენტირე.
-//// აუცილებლად app.UseAuthentication(); ქვემოთ.
-
-
+// login minimal api
 var y=  app.MapGet("/auth/login", () =>
 {
     return Results.Challenge(
@@ -125,8 +114,3 @@ app.MapControllers();
 app.Run();
 //  აპლიკაციას  რომ გაუშვებ, ჩაწერე url-ში https://localhost:7199/auth/login 
 
-///////////// github user info 
-//Pass:aaaQQQ123!@#
-//Email: lursmanashvilidavitt@gmail.com
-//EmailPass: bibliotekaapp
-//Username:bibliotekaapp

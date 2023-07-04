@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Library.Infrastructure.HelperClass;
 using Library.Infrastructure.Repositories.Interfaces;
+using Library.Infrastructure.Repositories.Repository;
 using Library.Models.Exceptions;
 using Library.Models.Models.Authors;
 using Library.Models.Models.Authors.CommandModel;
+using Library.Models.Models.Books.CommandModel;
 using Library.Service.IServices;
 
 namespace Library.Service.Services;
@@ -44,7 +46,6 @@ public class AuthorService : IAuthorService
         author.BirthDate = editAuthorRequest.BirthDate;
         author.Firstname = editAuthorRequest.Firstname;
         author.LastName = editAuthorRequest.LastName;
-        author.IsDeleted = editAuthorRequest.IsDeleted;
 
         await _authorRepository.UpdateAsync(author);
         return _mapper.Map<AuthorResponse>(author);
@@ -52,13 +53,19 @@ public class AuthorService : IAuthorService
 
     public async Task<bool> DeleteAuthor(DeleteAuthorRequest deleteAuthorRequest)
     {
-        var author = await _authorRepository.GetByIdAsync(deleteAuthorRequest.Authorid);
+        var author = await _authorRepository.GetByIdAsync(deleteAuthorRequest.Id);
         ValidationHelper.AuthorValidation(author);
-        var bookauthor = await _bookAuthorRepository.LoadAsync();
-        if (bookauthor.Any(x => x.Id == deleteAuthorRequest.Authorid && x.IsDeleted == false))
-            throw new BadRequestException($"Please Delete all books for  {author.Firstname} {author.LastName} author");
 
-        await _authorRepository.RemoveAsync(author);
+        if (author.IsDeleted)
+            throw new BadRequestException("Author with this id doesn't exist");
+
+        var bookauthor = await _bookAuthorRepository.LoadAsync();
+        if (bookauthor.Any(x => x.Id == deleteAuthorRequest.Id && x.IsDeleted == false))
+            throw new BadRequestException($"Please Delete all books firstly, in order to delete  {author.Firstname} {author.LastName} author");
+
+        author.IsDeleted = true;
+        await _authorRepository.UpdateAsync(author);
+        
         return true;
     }
 
@@ -87,5 +94,19 @@ public class AuthorService : IAuthorService
             });
         }
         return null;
+    }
+
+    public async Task<IEnumerable<AuthorResponse>?> SearchAuthor(string FirstName)
+    {
+        var Authors = await _authorRepository.LoadAsync() ?? throw new NotFoundException("Authors not foud");
+
+        var filtedAuthors = Authors.Where(x => x.IsDeleted == false && x.Firstname == FirstName)?.ToList() ?? throw new NotFoundException("Authors not foud");
+
+        return filtedAuthors.Select(x => new AuthorResponse()
+        {
+            Id = x.Id,
+            Firstname = x.Firstname,
+            LastName = x.LastName,
+        });
     }
 }
